@@ -35,11 +35,11 @@
 ### Data sources
 * The raw data was downloaded from various secondary sources including:
 <table>
-
+ <tr>
     <th>Country</th>
     <th>Survey</th>
     <th>Years</th>
-  </tr>
+ </tr>
   <tr>
     <td>Bangladesh</td>
     <td>Integrated Household Survey (BIHS)</td>
