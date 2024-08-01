@@ -53,6 +53,7 @@
 * Household food consumption from purchases is inclusive of food consumed away from home.
 * To remove outliers, the value of food consumption was winsorized at the top 1% threshold.
 * The average value of food consumption can be calculated using survey weights to be representative of the country and location levels.
+* Food consumption values in Local Currency Units are converted to 2017 Purchasing Power Parity (PPP). 
 
 
 
