@@ -17,7 +17,6 @@
     * Gambia Integrated Household Survey (IHS) 2015/16
     * Sierra Leone Integrated Household Survey (IHS) 2018
     * Enquête Harmonisée sur le Conditions de Vie des Ménages 2018-2019 (Senegal, Benin, Togo, Cote d'Ivoire, Guinea Bissau, Mali, Burkina Faso and Niger)
-![image](https://github.com/user-attachments/assets/bbec3bd2-4b14-4079-ab47-cba2d674a2ee)
 
 
 ## Prerequisites
