@@ -52,9 +52,10 @@
     * Burkina Faso Enquête Harmonisée sur le Conditions de Vie des Ménages 2021/22 
 
 ## Prerequisites
-* Download the raw data.
-* Extract the files to the "Raw DTA Files" folder in the cloned directory
-* Create sub-folders in the 'Raw DTA Files" (if desired) to align with current referenced file paths throughout the code (e.g. Household vs. Post Planting, etc.)
+* Download the raw data from the different sources.
+* For each country, extract the raw data files to a folder and update the global directory named "Country_Survey_raw_data" with the appropriate folder path.
+* Next create a folder where to store intermediary data files created and update the global directory named "Country_Survey_created_data".
+* Also, for each country, create a folder where to store intermediary data files created and update the global directory named "Country_Survey_created_data".
 * Update the directories with the correct paths to the raw data, created data and final data files
 
 
