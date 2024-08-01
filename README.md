@@ -99,7 +99,7 @@
   <tr>
     <td>Malawi</td>
     <td>Integrated Household Survey (IHS)</td>
-    <td>2010/11 and 2013, 2016/17, 2019/2020</td>
+    <td>2010/11, 2013, 2016/17, 2019/2020</td>
   </tr>
 <tr>
     <td>Mali</td>
@@ -117,7 +117,37 @@
     <td>2011/12 and 2014/15</td>
   </tr>
  <tr>
-    <td>Niger</td>
+    <td></td>
+    <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM) </td>
+    <td>2018/19</td>
+  </tr>
+ <tr>
+    <td>Nigeria</td>
+    <td>General Household Survey (GHS)</td>
+    <td>2010/22, 2012/13, 2015/16 and 2018/19</td>
+  </tr>
+ tr>
+    <td>Pakistan</td>
+    <td>Household Integrated Economic Survey (HIES)</td>
+    <td>2005/06, 2008/09, 2011/12, 2012/13, 2016/17, 2018/19</td>
+  </tr>
+ <tr>
+    <td>Senegal</td>
+    <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM) </td>
+    <td>2018/19</td>
+  </tr>
+ <tr>
+    <td>Sierra Leone</td>
+    <td>tegrated Household Survey (IHS)</td>
+    <td>2018</td>
+  </tr>
+ <tr>
+    <td>Tanzania</td>
+    <td>National Panel Survey (NPS)</td>
+    <td>2008/09, 2010/11, 2012/13, 2014/15, 2019/20</td>
+  </tr>
+ <tr>
+    <td>Togo</td>
     <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM) </td>
     <td>2018/19</td>
   </tr>
