@@ -1,3 +1,21 @@
+<table>
+  <tr>
+    <th>Company</th>
+    <th>Contact</th>
+    <th>Country</th>
+  </tr>
+  <tr>
+    <td>Alfreds Futterkiste</td>
+    <td>Maria Anders</td>
+    <td>Germany</td>
+  </tr>
+  <tr>
+    <td>Centro comercial Moctezuma</td>
+    <td>Francisco Chang</td>
+    <td>Mexico</td>
+  </tr>
+</table>
+
 # Household-Consumption-By-Source
 * This repository includes codes for constructing the value of household food consumption from different sources by crop and documentation for construction decisions across instruments.
 * Countries captured include Bangladesh, Benin, Burkina Faso, Cote d'Ivoire, Ethiopia, Gambia, Ghana, Guinea Bissau, Kenya, India, Malawi, Mali, Niger, Nigeria, Pakistan, Senegal, Tanzania, Togo, and Uganda.
@@ -32,6 +50,8 @@
 
 ### Data sources
 * The raw data was downloaded from various secondary sources including:
+    * Bangladesh Integrated Household Survey (BIHS) (2011/12, 2015/16, 2018/19)
+    * Benin Enquête Harmonisée sur le Conditions de Vie des Ménages 2021/22 
     * Burkina Faso Continuous Multisectoral Survey (EMC) 2014
     * Ethiopia Socioeconomic Survey (ESS) LSMS-ISA Wave 3 & 4 (2015/16 and 2018/19)
     * Malawi Integrated Household Survey (IHS) LSMS-ISA Wave 1 & 2 (2010/11 and 2013)
@@ -40,7 +60,7 @@
     * Nigeria General Household Survey (GHS) LSMS-ISA Wave 1, 2, 3 & 4 (2010/22, 2012/13, 2015/16 and 2018/19)
     * Tanzania National Panel Survey (NPS) LSMS-ISA Waves 1, 2, 3, 4 & 5 (2008/09, 2010/11, 2012/13, 2014/15, 2019/20)
     * Uganda National Panel Survey (UNPS) LSMS-ISA Waves 1, 2, 3, 4, 5, 6, 7 (2009/10, 2010/11, 2011/12, 2013/14, 2015/16, 2018/19, 2019/20)
-    * Bangladesh Integrated Household Survey (BIHS) (2011/12, 2015/16, 2018/19)
+    
     * India Household Consumer Expenditure (HCE) 2011/12
     * Pakistan Household Integrated Economic Survey (HIES) 2005/06, 2008/09, 2011/12, 2012/13, 2016/17, 2018/19
     * Kenya Integrated Household Budget Survey (KIHBS) 2015/16
