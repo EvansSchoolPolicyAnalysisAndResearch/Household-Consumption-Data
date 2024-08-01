@@ -15,8 +15,10 @@
     * Pakistan Household Integrated Economic Survey (HIES) 2005/06, 2008/09, 2011/12, 2012/13, 2016/17, 2018/19
     * Kenya Integrated Household Budget Survey (KIHBS) 2015/16
     * Gambia Integrated Household Survey (IHS) 2015/16
+    * Ghana Socioeconomic Panel Survey (SPS) 2009/10
     * Sierra Leone Integrated Household Survey (IHS) 2018
-    * Enquête Harmonisée sur le Conditions de Vie des Ménages 2018-2019 (Senegal, Benin, Togo, Cote d'Ivoire, Guinea Bissau, Mali, Burkina Faso and Niger)
+    * Enquête Harmonisée sur le Conditions de Vie des Ménages 2018-2019 (Senegal, Benin, Togo, Cote d'Ivoire, Guinea Bissau, Mali, Burkina Faso, and Niger)
+    * Burkina Faso Enquête Harmonisée sur le Conditions de Vie des Ménages 2021/22 
 
 
 ## Prerequisites
