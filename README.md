@@ -5,8 +5,7 @@
 ## Table of Contents
 ### Globals 
 * This section sets global variables for use later in the script, including
-  * **Exchange Rates**
-  * **Poverty Thresholds**
+  * **Exchange Rates and Inflation Conversions**
   * **Population:** We reference true rural and urban population estimates from the World Bank to re-weight households.
   * **Thresholds for Winsorization:** the smallest (below the 1 percentile) and largest (above the 99 percentile) are replaced with the observations closest to them
  
