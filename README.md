@@ -20,9 +20,8 @@
     * Enquête Harmonisée sur le Conditions de Vie des Ménages 2018-2019 (Senegal, Benin, Togo, Cote d'Ivoire, Guinea Bissau, Mali, Burkina Faso, and Niger)
     * Burkina Faso Enquête Harmonisée sur le Conditions de Vie des Ménages 2021/22 
 
-
 ## Prerequisites
-* Download the raw data from [https://microdata.worldbank.org/index.php/catalog/3557](https://microdata.worldbank.org/index.php/catalog/6161)
+* Download the raw data.
 * Extract the files to the "Raw DTA Files" folder in the cloned directory
 * Create sub-folders in the 'Raw DTA Files" (if desired) to align with current referenced file paths throughout the code (e.g. Household vs. Post Planting, etc.)
 * Update the directories with the correct paths to the raw data, created data and final data files
@@ -35,3 +34,15 @@
   * **Population:** We reference true rural and urban population estimates from the World Bank to re-weight households.
   * **Thresholds for Winsorization:** the smallest (below the 1 percentile) and largest (above the 99 percentile) are replaced with the observations closest to them
  
+### Household IDs
+- **Description:** This dataset includes hhid/grappe menage/hhcode as a unique identifier, along with its location identifiers (e.g. rural, region, zone, department, , ea)
+- **Output:** Ethiopia_ESS_W5_hhids.dta
+
+
+
+
+
+
+
+
+
