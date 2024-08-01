@@ -46,8 +46,7 @@
     <td>Integrated Household Survey (BIHS)</td>
     <td>2011/12, 2015/16, 2018/19</td>
   </tr>
- 
-  <tr>
+   <tr>
     <td>Bénin</td>
     <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM) </td>
     <td>2018/19</td>
@@ -57,7 +56,6 @@
     <td>Continuous Multisectoral Survey (EMC) </td>
     <td>2014</td>
   </tr>
-  
   <tr>
     <td> </td>
     <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM) </td>
@@ -69,17 +67,66 @@
     <td>2018/19</td>
   </tr>
   <tr>
-    <td>Cote d'Ivoire</td>
+    <td>Ethiopia</td>
+    <td>Socioeconomic Panel Survey </td>
+    <td>2015/16, 2018/19, 2012/22</td>
+  </tr>
+    <tr>
+    <td>Gambia</td>
+    <td>Integrated Household Survey (IHS)</td>
+    <td>2015/16</td>
+  </tr>
+  <tr>
+    <td>Ghana</td>
+    <td>Socioeconomic Panel Survey (SPS) </td>
+    <td>2009/10</td>
+  </tr>
+   <tr>
+    <td>Guinea Bissau</td>
     <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM) </td>
     <td>2018/19</td>
   </tr>
-  
+  <tr>
+    <td>Kenya</td>
+    <td>Integrated Household Budget Survey (KIHBS) </td>
+    <td>2015/16</td>
+  </tr>
+  <tr>
+    <td>India</td>
+    <td>Household Consumer Expenditure (HCE)</td>
+    <td>2011/12</td>
+  </tr>
+  <tr>
+    <td>Malawi</td>
+    <td>Integrated Household Survey (IHS)</td>
+    <td>2010/11 and 2013, 2016/17, 2019/2020</td>
+  </tr>
+<tr>
+    <td>Mali</td>
+    <td>Enquête Agricole de Conjoncture Intégrée (EACI)</td>
+    <td>2014</td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM) </td>
+    <td>2018/19</td>
+  </tr>
+  <tr>
+    <td>Niger</td>
+    <td>Enquête Nationale sur les Conditions de Vie des Ménages et l’Agriculture (ECVMA)</td>
+    <td>2011/12 and 2014/15</td>
+  </tr>
+ <tr>
+    <td>Niger</td>
+    <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM) </td>
+    <td>2018/19</td>
+  </tr>
 </table>
 * 
     * Bangladesh Integrated Household Survey (BIHS) (2011/12, 2015/16, 2018/19)
     * Benin Enquête Harmonisée sur les Conditions de Vie des Ménages 2021/22 
     * Burkina Faso Continuous Multisectoral Survey (EMC) 2014
-    * Ethiopia Socioeconomic Survey (ESS) LSMS-ISA Wave 3 & 4 (2015/16 and 2018/19)
+    * Ethiopia Socioeconomic Survey (ESS) LSMS-ISA 2015/16 and 2018/19
     * Malawi Integrated Household Survey (IHS) LSMS-ISA Wave 1 & 2 (2010/11 and 2013)
     * Mali Enquête Agricole de Conjoncture Intégrée (EACI) 2014.
     * Niger Enquête Nationale sur les Conditions de Vie des Ménages et l’Agriculture (ECVMA) LSMS-ISA Waves 1 & 2 (2011 and 2014)
