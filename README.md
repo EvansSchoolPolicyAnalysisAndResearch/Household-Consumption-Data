@@ -5,7 +5,7 @@
     * Burkina Faso Continuous Multisectoral Survey (EMC) 2014
     * Ethiopia Socioeconomic Survey (ESS) LSMS-ISA Wave 3 & 4 (2015/16 and 2018/19)
     * Malawi Integrated Household Survey (IHS) LSMS-ISA Wave 1 & 2 (2010/11 and 2013)
-    * Mali Enquête Agricole de Conjoncture Intégrée (EACI) 2014
+    * Mali Enquête Agricole de Conjoncture Intégrée (EACI) 2014.
     * Niger Enquête Nationale sur les Conditions de Vie des Ménages et l’Agriculture (ECVMA) LSMS-ISA Waves 1 & 2 (2011 and 2014)
     * Nigeria General Household Survey (GHS) LSMS-ISA Wave 1, 2, 3 & 4 (2010/22, 2012/13, 2015/16 and 2018/19)
     * Tanzania National Panel Survey (NPS) LSMS-ISA Waves 1, 2, 3, 4 & 5 (2008/09, 2010/11, 2012/13, 2014/15, 2019/20)
