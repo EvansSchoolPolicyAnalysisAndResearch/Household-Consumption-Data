@@ -1,4 +1,4 @@
-# Household-Consumption-By-Source-Data
+# Household-Consumption-By-Source
 * This repository includes codes for constructing the value of household food consumption from different sources by crop and documentation for construction decisions across instruments.
 * Countries captured include Bangladesh, Benin, Burkina Faso, Cote d'Ivoire, Ethiopia, Gambia, Ghana, Guinea Bissau, Kenya, India, Malawi, Mali, Niger, Nigeria, Pakistan, Senegal, Tanzania, Togo, and Uganda.
 
@@ -55,8 +55,8 @@
 * Download the raw data from the different sources.
 * For each country, extract the raw data files to a folder and update the global directory named "Country_Survey_raw_data" with the appropriate folder path.
 * Next create a folder where to store intermediary data files created and update the global directory named "Country_Survey_created_data".
-* Also, for each country, create a folder where to store intermediary data files created and update the global directory named "Country_Survey_created_data".
-* Update the directories with the correct paths to the raw data, created data and final data files
+* Also, create a folder to store all final data files created and update the global directory named "final_data".
+
 
 
 
