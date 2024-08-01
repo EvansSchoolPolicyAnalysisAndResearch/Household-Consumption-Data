@@ -21,7 +21,6 @@
 ### Consumption
 - **Description:** This dataset includes hhid/grappe menage/hhcode as a unique identifier and constructs food consumption at the crop level by the different sources (from purchases, own production, and gifts). 
 - **Data Construction Notes:**
-* The consumption data were processed as follows:
     *  Food items are aggregated into major crop categories.
     *  The value of food consumption from purchases was constructed using reported food prices in the surveys.
     *  The value of food consumption from own production and gifts are computed using the mean purchase price of the food items at various administrative levels. For instance, when the purchase price of a food item is reported by more than 10 observations in an enumeration area, the value of food consumed by the food item from production and gifts is derived by multiplying the food quantity with the median purchase price in that enumeration area. Depending on observations, the mean purchase price for each unit of food item was constructed at the different levels of disaggregation (enumeration area, local government area, woreda, district, state, and country).
