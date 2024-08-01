@@ -38,23 +38,36 @@
 <table>
   <tr>
     <th>Country</th>
-    <th>Contact</th>
-    <th>Country</th>
+    <th>Survey</th>
+    <th>Years</th>
   </tr>
   <tr>
-    <td>Alfreds Futterkiste</td>
-    <td>Maria Anders</td>
-    <td>Germany</td>
+    <td>Bangladesh</td>
+    <td>Integrated Household Survey (BIHS)</td>
+    <td>2011/12, 2015/16, 2018/19</td>
+  </tr>
+ 
+  <tr>
+    <td>Bénin</td>
+    <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM) </td>
+    <td>2018/19</td>
   </tr>
   <tr>
-    <td>Centro comercial Moctezuma</td>
-    <td>Francisco Chang</td>
-    <td>Mexico</td>
+    <td>Burkina Faso</td>
+    <td>Continuous Multisectoral Survey (EMC) </td>
+    <td>2014</td>
   </tr>
+  
+  <tr>
+    <td> </td>
+    <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM) </td>
+    <td>2018/19, 2021/21</td>
+  </tr>
+ 
 </table>
 * 
     * Bangladesh Integrated Household Survey (BIHS) (2011/12, 2015/16, 2018/19)
-    * Benin Enquête Harmonisée sur le Conditions de Vie des Ménages 2021/22 
+    * Benin Enquête Harmonisée sur les Conditions de Vie des Ménages 2021/22 
     * Burkina Faso Continuous Multisectoral Survey (EMC) 2014
     * Ethiopia Socioeconomic Survey (ESS) LSMS-ISA Wave 3 & 4 (2015/16 and 2018/19)
     * Malawi Integrated Household Survey (IHS) LSMS-ISA Wave 1 & 2 (2010/11 and 2013)
