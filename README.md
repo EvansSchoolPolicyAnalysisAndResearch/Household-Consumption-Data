@@ -1,20 +1,4 @@
-<table>
-  <tr>
-    <th>Company</th>
-    <th>Contact</th>
-    <th>Country</th>
-  </tr>
-  <tr>
-    <td>Alfreds Futterkiste</td>
-    <td>Maria Anders</td>
-    <td>Germany</td>
-  </tr>
-  <tr>
-    <td>Centro comercial Moctezuma</td>
-    <td>Francisco Chang</td>
-    <td>Mexico</td>
-  </tr>
-</table>
+
 
 # Household-Consumption-By-Source
 * This repository includes codes for constructing the value of household food consumption from different sources by crop and documentation for construction decisions across instruments.
@@ -50,6 +34,25 @@
 
 ### Data sources
 * The raw data was downloaded from various secondary sources including:
+
+<table>
+  <tr>
+    <th>Country</th>
+    <th>Contact</th>
+    <th>Country</th>
+  </tr>
+  <tr>
+    <td>Alfreds Futterkiste</td>
+    <td>Maria Anders</td>
+    <td>Germany</td>
+  </tr>
+  <tr>
+    <td>Centro comercial Moctezuma</td>
+    <td>Francisco Chang</td>
+    <td>Mexico</td>
+  </tr>
+</table>
+* 
     * Bangladesh Integrated Household Survey (BIHS) (2011/12, 2015/16, 2018/19)
     * Benin Enquête Harmonisée sur le Conditions de Vie des Ménages 2021/22 
     * Burkina Faso Continuous Multisectoral Survey (EMC) 2014
