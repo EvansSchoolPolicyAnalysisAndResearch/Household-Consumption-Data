@@ -32,7 +32,7 @@
     *  The average value of food consumption can be calculated using survey weights to be representative of the country and location levels.
     *  Food consumption values in Local Currency Units are converted to 2017 Purchasing Power Parity (PPP). 
 
-### Data sources
+## Data sources
 * The raw data was downloaded from various secondary sources including:
 <table>
  <tr>
@@ -153,7 +153,7 @@
 </table>
 
 
-### Prerequisites
+## Prerequisites
 * Download the raw data from the different sources.
 * For each country, extract the raw data files to a folder and update the global directory named "Country_Survey_raw_data" with the appropriate folder path.
 * Next create a folder where to store intermediary data files created and update the global directory named "Country_Survey_created_data".
