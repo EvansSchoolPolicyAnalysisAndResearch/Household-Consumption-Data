@@ -1,4 +1,4 @@
-# Household-Consumption-Data
+# Household-Consumption-By-Source-Data
 * This repository includes codes for constructing the value of household food consumption from different sources by crop and documentation for construction decisions across instruments.
 * Countries captured include Bangladesh, Benin, Burkina Faso, Cote d'Ivoire, Ethiopia, Gambia, Ghana, Guinea Bissau, Kenya, India, Malawi, Mali, Niger, Nigeria, Pakistan, Senegal, Tanzania, Togo, and Uganda.
 * The raw data was downloaded from various secondary sources including:
