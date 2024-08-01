@@ -48,22 +48,22 @@
   </tr>
    <tr>
     <td>Bénin</td>
-    <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM) </td>
+    <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM)</td>
     <td>2018/19</td>
   </tr>
   <tr>
     <td>Burkina Faso</td>
-    <td>Continuous Multisectoral Survey (EMC) </td>
+    <td>Continuous Multisectoral Survey (EMC)</td>
     <td>2014</td>
   </tr>
   <tr>
     <td> </td>
-    <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM) </td>
+    <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM)</td>
     <td>2018/19, 2021/21</td>
   </tr>
   <tr>
     <td>Cote d'Ivoire</td>
-    <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM) </td>
+    <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM)</td>
     <td>2018/19</td>
   </tr>
   <tr>
@@ -78,17 +78,17 @@
   </tr>
   <tr>
     <td>Ghana</td>
-    <td>Socioeconomic Panel Survey (SPS) </td>
+    <td>Socioeconomic Panel Survey (SPS)</td>
     <td>2009/10</td>
   </tr>
    <tr>
     <td>Guinea Bissau</td>
-    <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM) </td>
+    <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM)</td>
     <td>2018/19</td>
   </tr>
   <tr>
     <td>Kenya</td>
-    <td>Integrated Household Budget Survey (KIHBS) </td>
+    <td>Integrated Household Budget Survey (KIHBS)</td>
     <td>2015/16</td>
   </tr>
   <tr>
@@ -108,7 +108,7 @@
   </tr>
   <tr>
     <td></td>
-    <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM) </td>
+    <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM)</td>
     <td>2018/19</td>
   </tr>
   <tr>
@@ -118,7 +118,7 @@
   </tr>
  <tr>
     <td></td>
-    <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM) </td>
+    <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM)</td>
     <td>2018/19</td>
   </tr>
  <tr>
@@ -133,12 +133,12 @@
   </tr>
  <tr>
     <td>Senegal</td>
-    <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM) </td>
+    <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM)</td>
     <td>2018/19</td>
   </tr>
  <tr>
     <td>Sierra Leone</td>
-    <td>tegrated Household Survey (IHS)</td>
+    <td>Integrated Household Survey (IHS)</td>
     <td>2018</td>
   </tr>
  <tr>
