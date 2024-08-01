@@ -68,7 +68,11 @@
     <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM) </td>
     <td>2018/19</td>
   </tr>
-
+  <tr>
+    <td>Cote d'Ivoire</td>
+    <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM) </td>
+    <td>2018/19</td>
+  </tr>
   
 </table>
 * 
