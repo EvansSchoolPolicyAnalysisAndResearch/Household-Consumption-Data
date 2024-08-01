@@ -51,7 +51,7 @@
     * Enquête Harmonisée sur le Conditions de Vie des Ménages 2018-2019 (Senegal, Benin, Togo, Cote d'Ivoire, Guinea Bissau, Mali, Burkina Faso, and Niger)
     * Burkina Faso Enquête Harmonisée sur le Conditions de Vie des Ménages 2021/22 
 
-## Prerequisites
+### Prerequisites
 * Download the raw data from the different sources.
 * For each country, extract the raw data files to a folder and update the global directory named "Country_Survey_raw_data" with the appropriate folder path.
 * Next create a folder where to store intermediary data files created and update the global directory named "Country_Survey_created_data".
