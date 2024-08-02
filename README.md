@@ -147,8 +147,13 @@
   </tr>
  <tr>
     <td>Togo</td>
-    <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM) </td>
+    <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM)</td>
     <td>2018/19</td>
+  </tr>
+  <tr>
+    <td>Uganda</td>
+    <td>National Panel Survey (UNPS)</td>
+    <td>2009/10, 2010/11, 2011/12, 2013/14, 2015/16, 2018/19, 2019/20</td>
   </tr>
 </table>
 
