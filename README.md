@@ -67,7 +67,7 @@
   </tr>
   <tr>
     <td>Ethiopia</td>
-    <td>Socioeconomic Panel Survey </td>
+    <td>Socioeconomic Panel Survey (ESS)</td>
     <td>2015/16, 2018/19, 2012/22</td>
   </tr>
     <tr>
