@@ -408,7 +408,7 @@ lab var fhh "1= Female-headed household"
 lab var hh_members "Number of household members"
 lab var adulteq "Adult-Equivalent"
 lab var crop_category1 "Food items"
-egen hhid=concat(grappe menage)
+gen hhid=string(grappe)+"."+string(menage)
 lab var hhid "Household ID"
 save "${Burkina_EHCVM_W1_created_data}/Burkina_EHCVM_W1_food_consumption_value_combined.dta", replace
 
@@ -453,57 +453,6 @@ replace GID_1="BFA.10_1"  if adm1==10
 replace GID_1="BFA.11_1"  if adm1==11
 replace GID_1="BFA.12_1"  if adm1==12
 replace GID_1="BFA.13_1"  if adm1==13
-
-/*generate GID_2 code to match codes in the Benin shapefile
-gen GID_2=""
-replace GID_2="BFA.1.1_1"  if adm1==31
-replace GID_2="BFA.1.2_1"  if adm1==32
-replace GID_2="BFA.1.3_1"  if adm1==13
-replace GID_2="BFA.1.4_1"  if adm1==15
-replace GID_2="BFA.1.5_1"  if adm1==40
-replace GID_2="BFA.1.6_1"  if adm1==27
-replace GID_2="BFA.2.1_1"  if adm1==6
-replace GID_2="BFA.2.2_1"  if adm1==38
-replace GID_2="BFA.7.1_1"  if adm1==11
-replace GID_2="BFA.3.1_1"  if adm1==4
-replace GID_2="BFA.3.2_1"  if adm1==36
-replace GID_2="BFA.3.3_1"  if adm1==14
-replace GID_2="BFA.4.1_1"  if adm1==1
-replace GID_2="BFA.4.2_1"  if adm1==17
-replace GID_2="BFA.4.3_1"  if adm1==23
-replace GID_2="BFA.5.1_1"  if adm1==5
-replace GID_2="BFA.5.2_1"  if adm1==22
-replace GID_2="BFA.5.3_1"  if adm1==25
-replace GID_2="BFA.5.4_1"  if adm1==44
-replace GID_2="BFA.6.1_1"  if adm1==2
-replace GID_2="BFA.6.2_1"  if adm1==16
-replace GID_2="BFA.6.3_1"  if adm1==30
-replace GID_2="BFA.8.1_1"  if adm1==8
-replace GID_2="BFA.8.2_1"  if adm1==9
-replace GID_2="BFA.8.3_1"  if adm1==34
-replace GID_2="BFA.8.4_1"  if adm1==35
-replace GID_2="BFA.8.5_1"  if adm1==28
-replace GID_2="BFA.9.1_1"  if adm1==10
-replace GID_2="BFA.9.2_1"  if adm1==12
-replace GID_2="BFA.9.3_1"  if adm1==42
-replace GID_2="BFA.10.1_1"  if adm1==39
-replace GID_2="BFA.10.2_1"  if adm1==20
-replace GID_2="BFA.10.3_1"  if adm1==29
-replace GID_2="BFA.10.4_1"  if adm1==45
-replace GID_2="BFA.11.1_1"  if adm1==7
-replace GID_2="BFA.11.2_1"  if adm1==37
-replace GID_2="BFA.11.3_1"  if adm1==18
-replace GID_2="BFA.12.1_1"  if adm1==19
-replace GID_2="BFA.12.2_1"  if adm1==24
-replace GID_2="BFA.12.3_1"  if adm1==26
-replace GID_2="BFA.12.4_1"  if adm1==43
-replace GID_2="BFA.13.1_1"  if adm1==3
-replace GID_2="BFA.13.2_1"  if adm1==33
-replace GID_2="BFA.13.3_1"  if adm1==41
-replace GID_2="BFA.13.4_1"  if adm1==21
-lab var GID_2 "Adm2 code from the GADM shapefile"
-*/
-
 lab var GID_1 "Adm1 code from the GADM shapefile"
 
 *Additional aggregation of commodities

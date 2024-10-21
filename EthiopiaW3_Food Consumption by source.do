@@ -87,7 +87,7 @@ global wins_upper_thres 99							//  Threshold for winzorization at the top of t
 ********************************************************************************
 *HOUSEHOLD IDS
 ********************************************************************************
-use "$Ethiopia_ESS_W3_raw_data/Household/sect1_hh_W3.dta", clear
+use "$Ethiopia_ESS_W3_raw_data/sect1_hh_W3.dta", clear
 ren hh_s1q04a age
 ren hh_s1q03 gender
 gen fhh = gender==2 if hh_s1q02==1	 
@@ -113,7 +113,7 @@ replace adulteq=. if age==999
 lab var adulteq "Adult-Equivalent"
 collapse (sum) hh_members adulteq (max) fhh, by (household_id2)
 
-merge 1:1 household_id2 using "$Ethiopia_ESS_W3_raw_data/Household/sect_cover_hh_w3.dta", nogen keep (1 3)
+merge 1:1 household_id2 using "$Ethiopia_ESS_W3_raw_data/sect_cover_hh_w3.dta", nogen keep (1 3)
 ren saq01 region
 ren saq02 zone
 ren saq03 woreda
@@ -167,7 +167,7 @@ save "${Ethiopia_ESS_W3_created_data}/Ethiopia_ESS_W3_hhids.dta", replace
 ********************************************************************************
 *CONSUMPTION
 ******************************************************************************** 
-use "${Ethiopia_ESS_W3_raw_data}/Household/sect5a_hh_w3.dta", clear
+use "${Ethiopia_ESS_W3_raw_data}/sect5a_hh_w3.dta", clear
 merge m:1 household_id2 using "${Ethiopia_ESS_W3_created_data}/Ethiopia_ESS_W3_hhids.dta", nogen keep (1 3)
 *label list HH_J00
 ren item_cd item_code
@@ -266,7 +266,7 @@ replace food_consu_qty=food_consu_qty*100 if food_consu_unit==3
 replace food_purch_qty=food_purch_qty*100 if food_purch_unit==3
 replace food_prod_qty=food_prod_qty*100 if food_prod_unit==3
 replace food_gift_qty=food_gift_qty*100 if food_gift_unit==3
-recode food_consu_unit food_purch_unit food_prod_unit food_gift_unit (2 3 =1 ) (5 =4)  // gramns and quintal in kg and mili in liter
+recode food_consu_unit food_purch_unit food_prod_unit food_gift_unit (2 3 =1 ) (5 =4)  // grams and quintal in kg and mili in liter
 
 
 keep if food_consu_yesno==1

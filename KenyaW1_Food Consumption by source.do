@@ -118,7 +118,7 @@ merge 1:m clid hhid using "${Kenya_IHS_W1_raw_data}/HH_Information.dta", nogen k
 ren strat strata
 gen rural = (resid==1)
 lab var rural "1=Household lives in a rural area"
-egen HHID=concat(clid hhid)
+gen HHID=string(clid)+"."+string(hhid)
 
 *Generating the variable that indicate the level of representativness of the survey (to use for reporting summary stats)
 *Representative at the county level.
@@ -144,7 +144,7 @@ save "${Kenya_IHS_W1_created_data}/Kenya_IHS_W1_hhids.dta", replace
 *CONSUMPTION
 ******************************************************************************** 
 use "${Kenya_IHS_W1_raw_data}/food.dta", clear
-egen HHID=concat(clid hhid)
+gen HHID=string(clid)+"."+string(hhid)
 merge m:1 clid hhid using "${Kenya_IHS_W1_created_data}/Kenya_IHS_W1_hhids.dta", nogen keep (1 3)
 
 label list item_code

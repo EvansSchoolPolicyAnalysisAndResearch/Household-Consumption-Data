@@ -1004,7 +1004,7 @@ replace GID_1="UGA.53_1"  if adm1=="SSEMBABULE"
 replace GID_1="UGA.56_1"  if adm1=="TORORO"
 replace GID_1="UGA.57_1"  if adm1=="WAKISO"
 replace GID_1="UGA.58_1"  if adm1=="YUMBE"
-la
+lab var GID_1 "Adm1 code from the GADM shapefile"
 
 
 *Additional aggregation of commodities

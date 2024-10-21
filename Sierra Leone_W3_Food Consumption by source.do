@@ -542,7 +542,7 @@ lab var hh_members "Number of household members"
 lab var adulteq "Adult-Equivalent"
 lab var crop_category1 "Food items"
 ren hhid hhid2
-egen hhid=concat(hhid2 ea)
+gen hhid=string(hhid2)+"."+string(ea)
 lab var hhid "Household ID"
 
 save "${SierraLeone_IHS_W3_created_data}/SierraLeone_IHS_W3_food_consumption_value.dta", replace

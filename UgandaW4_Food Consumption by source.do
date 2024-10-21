@@ -793,6 +793,69 @@ lab var Year "Survey year"
 
 keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
 
+
+*generate GID_1 code to match codes in the Benin shapefile
+gen GID_1=""
+replace GID_1="UGA.1_1"  if adm1==301
+replace GID_1="UGA.2_1"  if adm1==302
+replace GID_1="UGA.3_1"  if adm1==303
+replace GID_1="UGA.4_1"  if adm1==201
+*replace GID_1="UGA.5_1"  if adm1==
+replace GID_1="UGA.6_1"  if adm1==402
+replace GID_1="UGA.7_1"  if adm1==202
+replace GID_1="UGA.8_1"  if adm1==304
+replace GID_1="UGA.9_1"  if adm1==403
+replace GID_1="UGA.10_1"  if adm1==203
+replace GID_1="UGA.11_1"  if adm1==204
+replace GID_1="UGA.12_1"  if adm1==404
+replace GID_1="UGA.13_1"  if adm1==405
+replace GID_1="UGA.14_1"  if adm1==213
+replace GID_1="UGA.15_1"  if adm1==101
+replace GID_1="UGA.16_1"  if adm1==102
+replace GID_1="UGA.17_1"  if adm1==205
+replace GID_1="UGA.18_1"  if adm1==413
+replace GID_1="UGA.19_1"  if adm1==414
+*replace GID_1="UGA.20_1"  if adm1==
+replace GID_1="UGA.21_1"  if adm1==406
+replace GID_1="UGA.22_1"  if adm1==207
+replace GID_1="UGA.23_1"  if adm1==112
+replace GID_1="UGA.24_1"  if adm1==407
+replace GID_1="UGA.25_1"  if adm1==103
+replace GID_1="UGA.26_1"  if adm1==408
+replace GID_1="UGA.27_1"  if adm1==305
+replace GID_1="UGA.28_1"  if adm1==306
+replace GID_1="UGA.29_1"  if adm1==208
+replace GID_1="UGA.30_1"  if adm1==415
+*replace GID_1="UGA.31_1"  if adm1==
+*replace GID_1="UGA.32_1"  if adm1==
+replace GID_1="UGA.33_1"  if adm1==307
+replace GID_1="UGA.34_1"  if adm1==104
+replace GID_1="UGA.35_1"  if adm1==105
+replace GID_1="UGA.36_1"  if adm1==409
+replace GID_1="UGA.37_1"  if adm1==214
+replace GID_1="UGA.38_1"  if adm1==209
+replace GID_1="UGA.39_1"  if adm1==410
+replace GID_1="UGA.40_1"  if adm1==308
+replace GID_1="UGA.41_1"  if adm1==309
+replace GID_1="UGA.42_1"  if adm1==106
+replace GID_1="UGA.43_1"  if adm1==107
+replace GID_1="UGA.44_1"  if adm1==108
+replace GID_1="UGA.45_1"  if adm1==311
+replace GID_1="UGA.46_1"  if adm1==109
+replace GID_1="UGA.47_1"  if adm1==310
+*replace GID_1="UGA.48_1"  if adm1==
+replace GID_1="UGA.49_1"  if adm1==312
+replace GID_1="UGA.50_1"  if adm1==210
+replace GID_1="UGA.51_1"  if adm1==110
+*replace GID_1="UGA.52_1"  if adm1==
+replace GID_1="UGA.53_1"  if adm1==111
+replace GID_1="UGA.54_1"  if adm1==215
+replace GID_1="UGA.55_1"  if adm1==211
+replace GID_1="UGA.56_1"  if adm1==212
+replace GID_1="UGA.57_1"  if adm1==113
+replace GID_1="UGA.58_1"  if adm1==313
+
+
 *Additional aggregation of commodities
 gen  crop_category2=""		
 replace  crop_category2=	"Cereals"	if crop_category1==	" Rice"	

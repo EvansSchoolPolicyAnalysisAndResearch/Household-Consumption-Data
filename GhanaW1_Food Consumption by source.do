@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------
 *Title/Purpose 	: This do.file was developed by the Evans School Policy Analysis & Research Group (EPAR) 
 				 for the construction of a set of household fod consumption by food categories and source
-				 (purchased, own production and gifts) indicators using the Ghana Socioeconomic Panel Survey 2015/16
+				 (purchased, own production and gifts) indicators using the Ghana Socioeconomic Panel Survey 2009/10
 
 *Author(s)		: Amaka Nnaji, Didier Alia & C. Leigh Anderson
 
@@ -69,10 +69,10 @@ global final_data  		"//netid.washington.edu/wfs/EvansEPAR/Project/EPAR/Working 
 global Ghana_SPS_W1_exchange_rate 4.35		// https://data.worldbank.org/indicator/PA.NUS.FCRF?locations=GH
 global Ghana_SPS_W1_gdp_ppp_dollar 1.76		// https://data.worldbank.org/indicator/PA.NUS.PPP
 global Ghana_SPS_W1_cons_ppp_dollar 1.75		// https://data.worldbank.org/indicator/PA.NUS.PRVT.PP?locations=GH
-global Ghana_SPS_W1_inflation 0		// inflation rate 2009-2017. Data was collected during 2012-2013. We want to ajhust value to 2017 https://data.worldbank.org/indicator/FP.CPI.TOTL?locations=GH
+global Ghana_SPS_W1_inflation 1.67		// inflation rate 2009-2017. Data was collected during 2012-2013. We want to ajhust value to 2017 https://data.worldbank.org/indicator/FP.CPI.TOTL?locations=GH
 
 
-*DYA.11.1.2020 Re-scaling survey weights to match population estimates
+*Re-scaling survey weights to match population estimates
 *https://databank.worldbank.org/source/world-development-indicators#
 global Ghana_SPS_W1_pop_tot 30222262
 global Ghana_SPS_W1_pop_rur 13477013
@@ -688,6 +688,9 @@ foreach x of varlist food_consu_value food_purch_value food_prod_value food_gift
 	drop `x'
 }
 
+ren hhid old_hhid
+tostring old_hhid, gen(hhid)
+drop old_hhid
 
 compress
 save "${final_data}/Ghana_SPS_W1_food_consumption_value_by_source.dta", replace
