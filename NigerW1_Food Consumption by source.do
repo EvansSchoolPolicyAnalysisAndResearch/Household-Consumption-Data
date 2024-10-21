@@ -1073,6 +1073,9 @@ foreach x of varlist food_consu_value food_purch_value food_prod_value food_gift
 	drop `x'
 }
 
+ren hhid old_hhid
+gen hhid=string(old_hhid)
+drop old_hhid
 
 compress
 save "${final_data}/Niger_ECVMA_W1_food_consumption_value_by_source.dta", replace

@@ -55,7 +55,7 @@ ssc install findname  // need this user-written ado file for some commands to wo
 global directory 					"//netid.washington.edu/wfs/EvansEPAR/Project/EPAR/Working Files/335 - Ag Team Data Support/Waves"
 
 *Set directories
-global Ethiopia_ESS_W4_raw_data			"$directory/Ethiopia ESS/Ethiopia ESS Wave 4/Raw DTA Files/ETH_2018_ESS_v01_M_STATA8"
+global Ethiopia_ESS_W4_raw_data			"$directory/Ethiopia ESS/Ethiopia ESS Wave 4/Raw DTA Files"
 global Ethiopia_ESS_W4_created_data		"//netid.washington.edu/wfs/EvansEPAR/Project/EPAR/Working Files/439 - Household Food Consumption by Source/Food consumption by source/Consumption Data Curation/created_data"
 global final_data  		"//netid.washington.edu/wfs/EvansEPAR/Project/EPAR/Working Files/439 - Household Food Consumption by Source/Food consumption by source/Consumption Data Curation/final_data"
 
@@ -86,7 +86,7 @@ global wins_upper_thres 99							//  Threshold for winzorization at the top of t
 ********************************************************************************
 *HOUSEHOLD IDS
 ********************************************************************************
-use "$Ethiopia_ESS_W4_raw_data/Household/sect1_hh_W4.dta", clear
+use "$Ethiopia_ESS_W4_raw_data/sect1_hh_W4.dta", clear
 
 ren s1q03a age
 ren s1q02 gender
@@ -113,7 +113,7 @@ replace adulteq=. if age==999
 lab var adulteq "Adult-Equivalent"
 collapse (sum) hh_members adulteq (max) fhh, by (household_id)
 
-merge 1:1 household_id using "$Ethiopia_ESS_W4_raw_data/Household/sect_cover_hh_W4.dta", nogen keep (1 3)
+merge 1:1 household_id using "$Ethiopia_ESS_W4_raw_data/sect_cover_hh_W4.dta", nogen keep (1 3)
 ren saq01 region
 ren saq02 zone
 ren saq03 woreda
@@ -200,7 +200,7 @@ save "${Ethiopia_ESS_W4_created_data}/Ethiopia_ESS_W4_hhids.dta", replace
 ********************************************************************************
 *CONSUMPTION
 ******************************************************************************** 
-use "${Ethiopia_ESS_W4_raw_data}/Household/sect6a_hh_w4.dta", clear
+use "${Ethiopia_ESS_W4_raw_data}/sect6a_hh_w4.dta", clear
 ren household_id hhid
 merge m:1 hhid using "${Ethiopia_ESS_W4_created_data}/Ethiopia_ESS_W4_hhids.dta", nogen keep (1 3)
 *label list HH_J00
@@ -280,54 +280,6 @@ replace crop_category1=	"Other Food"			if  item_code==	902
 replace crop_category1=	"Wheat"			if  item_code==	903
 replace crop_category1=	"Other Food"			if  item_code==	904
 
-////////////////////////////////////////////////////////////////////////////////
-// SRK Chunk
-gen crop_category3 = ""
-replace crop_category3 = "Cereals" if inlist(item_code, 101, 102, 103, 104, 105, 106, 107, 108, 109, 901, 902, 903) // includes purchased or processed bread, flatbread, pasta
-replace crop_category3 = "Tubers" if inlist(item_code, 601, 602, 603, 604, 605, 606, 607, 608, 609, 610)
-replace crop_category3 = "Pulses" if inlist(item_code, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211) // ground nut included as pulse, could be fruit?
-replace crop_category3 = "Vege" if inlist(item_code, 401, 402, 403, 404, 405, 406, 407, 408)
-replace crop_category3 = "Fruits" if inlist(item_code, 501, 502, 503, 504, 505, 506)
-replace crop_category3 = "Meat" if inlist(item_code, 701, 702, 703, 714) // includes camel meat (coded as "other meat" above)
-replace crop_category3 = "Fish" if inlist(item_code, 704)
-replace crop_category3 = "Eggs" if inlist(item_code, 709)
-replace crop_category3 = "Dairy" if inlist(item_code, 705, 706, 707) // includes butter/ghee as dairy
-replace crop_category3 = "Fats" if inlist(item_code, 301, 302, 303, 304, 305, 708) // includes niger seed, linseed, sesame, sun flower, and other
-replace crop_category3 = "Sugars" if inlist(item_code, 710, 711)
-
-gen Diet_ID = .
-replace Diet_ID = 1 if inlist(item_code, 101, 102, 103, 104, 105, 106, 107, 108, 109, 901, 902, 903) // includes purchased or processed bread, flatbread, pasta
-replace Diet_ID = 2 if inlist(item_code, 206, 601, 602, 603, 604, 605, 606, 607, 608, 609, 610)
-replace Diet_ID = 3 if inlist(item_code, 401, 402, 403, 404, 405, 406, 407, 408)
-replace Diet_ID = 4 if inlist(item_code, 501, 502, 503, 504, 505, 506)
-replace Diet_ID = 5 if inlist(item_code, 701, 702, 703)
-replace Diet_ID = 6 if inlist(item_code, 709)
-replace Diet_ID = 7 if inlist(item_code, 704)
-replace Diet_ID = 8 if inlist(item_code, 201, 202, 203, 204, 205, 207, 208, 209, 210, 211, 301, 302, 303, 304, 305)
-replace Diet_ID = 9 if inlist(item_code, 705, 706, 707) // includes butter/ghee as dairy
-replace Diet_ID = 10 if inlist(item_code, 708)
-replace Diet_ID = 11 if inlist(item_code, 710, 711)
-replace Diet_ID = 14 if inlist(item_code, 712, 713, 801, 802, 803, 804, 805, 806, 807) // not including "other prepared foods"
-la define diet 1 "CEREALS" 2 "WHITE ROOTS, TUBER AND OTHER STARCHES" 3 "VEGETABLES" 4 "FRUITS" 5 "MEAT" 6 "EGGS" 7 "FISH" 8 "LEGUMES, NUTS AND SEEDS" 9 "MILK AND MILK PRODUCTS" 10 "OILS AND FATS" 11 "SWEETS" 14 "SPICES, CONDIMENTS, BEVERAGES"
-
-preserve
-gen adiet_yes = (s6aq01==1)
-collapse (max) adiet_yes, by(hhid Diet_ID)
-label define YesNo 1 "Yes" 0 "No"
-la val adiet_yes YesNo
-collapse (sum) adiet_yes, by(hhid)
-ren adiet_yes number_foodgroup
-local cut_off1=6
-local cut_off2=round(r(mean))
-gen household_diet_cut_off1=(number_foodgroup>=`cut_off1')
-gen household_diet_cut_off2=(number_foodgroup>=`cut_off2')
-lab var household_diet_cut_off1 "1= household consumed at least `cut_off1' of the 12 food groups last week" 
-lab var household_diet_cut_off2 "1= household consumed at least `cut_off2' of the 12 food groups last week" 
-label var number_foodgroup "Number of food groups individual consumed last week HDDS"
-save "${Ethiopia_ESS_W4_created_data}/Ethiopia_ESS_W4_household_diet.dta", replace
-restore
-// end SRK chunk
-////////////////////////////////////////////////////////////////////////////////
 
 ren s6aq01 food_consu_yesno
 ren s6aq02b food_consu_unit
@@ -349,7 +301,7 @@ replace food_consu_qty=food_consu_qty*100 if food_consu_unit==3
 replace food_purch_qty=food_purch_qty*100 if food_purch_unit==3
 replace food_prod_qty=food_prod_qty*100 if food_prod_unit==3
 replace food_gift_qty=food_gift_qty*100 if food_gift_unit==3
-recode food_consu_unit food_purch_unit food_prod_unit food_gift_unit (2 3 =1 ) (5 =4)  // gramns and quintal in kg and mili in liter
+recode food_consu_unit food_purch_unit food_prod_unit food_gift_unit (2 3 =1 ) (5 =4)  // grams and quintal in kg and mili in liter
 
 
 keep if food_consu_yesno==1
@@ -498,20 +450,6 @@ merge 1:1  hhid item_code crop_category1  using "${Ethiopia_ESS_W4_created_data}
 merge 1:1  hhid item_code crop_category1  using "${Ethiopia_ESS_W4_created_data}/Ethiopia_ESS_W4_consumption_purchase_prod.dta", nogen
 merge 1:1  hhid item_code crop_category1  using "${Ethiopia_ESS_W4_created_data}/Ethiopia_ESS_W4_consumption_purchase_gift.dta", nogen
 
-////////////////////////////////////////////////////////////////////////////////
-// SRK Chunk
-preserve
-collapse (sum) food_consu_value food_purch_value food_prod_value food_gift_value, by(hhid crop_category3)
-recode  food_consu_value food_purch_value food_prod_value food_gift_value (.=0)
-replace food_consu_value=food_purch_value if food_consu_value<food_purch_value  // recode consumption to purchase if smaller
-label var food_consu_value "Value of food consumed over the past 7 days"
-label var food_purch_value "Value of food purchased over the past 7 days"
-label var food_prod_value "Value of food produced by household over the past 7 days"
-label var food_gift_value "Value of food received as a gift over the past 7 days"
-save "${Ethiopia_ESS_W4_created_data}/Ethiopia_ESS_W4_food_home_consumption_value_cat3.dta", replace
-restore
-// end SRK chunk
-////////////////////////////////////////////////////////////////////////////////
 
 collapse (sum) food_consu_value food_purch_value food_prod_value food_gift_value, by(hhid crop_category1)
 recode  food_consu_value food_purch_value food_prod_value food_gift_value (.=0)
@@ -651,132 +589,6 @@ foreach x of varlist food_consu_value food_purch_value food_prod_value food_gift
 compress
 save "${final_data}/Ethiopia_ESS_W4_food_consumption_value_by_source.dta", replace
 
-
-////////////////////////////////////////////////////////////////////////////////
-// SRK Chunk
-*** crop_category3 section
-use "${Ethiopia_ESS_W4_created_data}/Ethiopia_ESS_W4_food_home_consumption_value_cat3.dta", clear
-merge m:1 hhid using "${Ethiopia_ESS_W4_created_data}/Ethiopia_ESS_W4_hhids.dta", nogen keep(1 3)
-
-*convert to annual value by multiplying with 52
-replace food_consu_value=food_consu_value*52
-replace food_purch_value=food_purch_value*52 
-replace food_prod_value=food_prod_value*52 
-replace food_gift_value=food_gift_value*52 
-
-label var food_consu_value "Annual value of food consumed, nominal"
-label var food_purch_value "Annual value of food purchased, nominal"
-label var food_prod_value "Annual value of food produced, nominal"
-label var food_gift_value "Annual value of food received, nominal"
-lab var fhh "1= Female-headed household"
-lab var hh_members "Number of household members"
-lab var adulteq "Adult-Equivalent"
-lab var crop_category3 "Food items"
-lab var hhid "Household ID"
-
-save "${Ethiopia_ESS_W4_created_data}/Ethiopia_ESS_W4_food_consumption_value3.dta", replace  
-
-
-
-*RESCALING the components of consumption such that the sum always match
-** winsorize top 1%
-foreach v in food_consu_value food_purch_value food_prod_value food_gift_value /*food_consu_valueR food_purch_valueR food_prod_valueR  food_gift_valueR */{
-	_pctile `v' [aw=weight] if `v'!=0 , p($wins_upper_thres)  
-	gen w_`v'=`v'
-	replace  w_`v' = r(r1) if  w_`v' > r(r1) &  w_`v'!=.
-	local l`v' : var lab `v'
-	lab var  w_`v'  "`l`v'' - Winzorized top 1%"	
-}
-
-
-//ren region adm1
-//lab var adm1 "Adminstrative subdivision 1 - state/region/province"
-//ren zone adm2
-//lab var adm2 "Adminstrative subdivision 2 - lga/zone/district/municipality"
-//ren woreda adm3
-//lab var adm3 "Adminstrative subdivision 3 - county"
-qui gen Country="Ethiopia"
-lab var Country "Country name"
-qui gen Instrument="Ethiopia LSMS-ISA/ESS W4"
-lab var Instrument "Survey name"
-qui gen Year="2021/22"
-lab var Year "Survey year"
-
-keep hhid crop_category3 food_consu_value food_purch_value food_prod_value food_gift_value hh_members w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value adulteq fhh weight rural region zone woreda city subcity kebele ea household level_representativness Instrument Country Year
-
-*Convert nominal consumption value to 2017 PPP
-gen conv_lcu_ppp=.
-lab var conv_lcu_ppp "Conversion Factor"		
-replace conv_lcu_ppp=	0.058482723	if Instrument==	"Ethiopia LSMS-ISA/ESS W4"
-
-foreach x of varlist food_consu_value food_purch_value food_prod_value food_gift_value w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value   {
-	gen `x'_ppp=`x'*conv_lcu_ppp
-	local l`x': var lab `x' 
-	clonevar `x'_lcu=`x'
-	local temp1 = subinstr("`l`x''", "nominal", "2017 PPP", 1)
-	lab var `x'_ppp "`temp1'"
-	
-	local temp2 = subinstr("`l`x''", "nominal", "nominal LCU", 1)
-	lab var `x'_lcu "`temp2'"
-	
-	drop `x'
-}
-
-compress
-save "${final_data}/Ethiopia_ESS_W4_food_consumption_value_by_source3.dta", replace
-
-
-use "${Ethiopia_ESS_W4_raw_data}/Household/sect8_hh_W4.dta", clear
-gen food_insec = s8q06 == 1
-recode food_insec .=0
-lab var food_insec "Household has experienced food insecurity (shortage) in past 12 months"
-la def insec 0 "No" 1 "Yes"
-la val food_insec insec 
-egen months_food_insec = rowtotal(s8q07__*)
-gen months_food_insec_cond = months_food_insec if food_insec == 1
-la var months_food_insec "Number of months that a hh experienced food shortage in the past 12 months"
-la var months_food_insec_cond "Number of months that a hh exp food shortage in the past 12 months, if they experienced a shortage"
-keep household_id food_insec months_food_insec months_food_insec_cond
-ren household_id hhid
-save "${Ethiopia_ESS_W4_created_data}/Ethiopia_ESS_W4_food_insecurity.dta", replace
-
-
-use "${final_data}/Ethiopia_ESS_W4_food_consumption_value_by_source3.dta", clear
-foreach y in food_consu_value_ppp food_consu_value_lcu w_food_consu_value_ppp w_food_consu_value_lcu {
-	gen `y'_adeq = `y' / adulteq
-}
-ren *food_consu_value* *cons_val*
-tempfile consumption_value
-save `consumption_value'
-
-global list cons_val_ppp cons_val_lcu w_cons_val_ppp w_cons_val_lcu cons_val_ppp_adeq cons_val_lcu_adeq w_cons_val_ppp_adeq w_cons_val_lcu_adeq
-
-foreach x of global list {
-	use `consumption_value', clear
-	drop if crop_category3 == "" // salt, other condiments, coffee, tea, soft drinks/soda, beer, chat/Kat, hops/gesho, bottled water, other purchased food
-	keep hhid crop_category3 `x'
-	rename `x' `x'_
-	reshape wide `x'_, i(hhid) j(crop_category3) string
-	tempfile `x'_temp
-	save ``x'_temp'
-}
-
-
-use "${final_data}/Ethiopia_ESS_W4_food_consumption_value_by_source3.dta", clear
-drop if crop_category3 == "" // salt, other condiments, coffee, tea, soft drinks/soda, beer, chat/Kat, hops/gesho, bottled water, other purchased food
-collapse (max) hh_members fhh, by(hhid adulteq weight rural region zone woreda city subcity kebele ea household level_representativness Instrument Country Year)
-foreach x of global list {
-	merge 1:1 hhid using ``x'_temp', nogen
-	egen `x'_total = rowtotal(`x'_*)
-}
-
-merge 1:1 hhid using "${Ethiopia_ESS_W4_created_data}/Ethiopia_ESS_W4_food_insecurity.dta", nogen keep(3)
-merge 1:1 hhid using "${Ethiopia_ESS_W4_created_data}/Ethiopia_ESS_W4_household_diet.dta", nogen keep(3)
-
-save "${Ethiopia_ESS_W4_created_data}/Ethiopia_ESS_W4_household_consum_estimates.dta", replace
-
-// end SRK chunk
-////////////////////////////////////////////////////////////////////////////////
 
 *****End of Do File*****
 

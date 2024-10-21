@@ -421,8 +421,14 @@ foreach x of varlist food_consu_value food_purch_value food_prod_value food_gift
 	drop `x'
 }
 
+ren hhid old_hhid
+gen hhid=string(old_hhid)
+drop old_hhid
+
 compress
 save "${final_data}/Pakistan_HIES_W1_food_consumption_value_by_source.dta", replace
+
+
 
 
 *****End of Do File*****

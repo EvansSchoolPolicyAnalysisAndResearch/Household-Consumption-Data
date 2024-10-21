@@ -901,8 +901,8 @@ replace GID_1="UGA.47_1"  if adm1==310
 replace GID_1="UGA.49_1"  if adm1==312
 replace GID_1="UGA.50_1"  if adm1==210
 replace GID_1="UGA.51_1"  if adm1==110
-replace GID_1="UGA.52_1"  if adm1==111
-replace GID_1="UGA.53_1"  if adm1==215
+*replace GID_1="UGA.52_1"  if adm1==
+replace GID_1="UGA.53_1"  if adm1==111
 replace GID_1="UGA.54_1"  if adm1==215
 replace GID_1="UGA.55_1"  if adm1==211
 replace GID_1="UGA.56_1"  if adm1==212

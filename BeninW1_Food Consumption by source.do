@@ -139,13 +139,13 @@ gen ccf_2ppp = (1 + $Benin_EHCVM_W1_inflation)/ $Benin_EHCVM_W1_gdp_ppp_dollar
 lab var ccf_2ppp "currency conversion factor - 2017 $GDP PPP"
 
 keep grappe menage region department fhh weight hh_members adulteq rural
+gen hhid=string(grappe)+"."+string(menage)
 save  "${Benin_EHCVM_W1_created_data}/Benin_EHCVM_W1_hhids.dta", replace
 
 
 ********************************************************************************
 *CONSUMPTION
 ******************************************************************************** 
-*Visit 1
 use "${Benin_EHCVM_W1_raw_data}/s07b_me_ben2018.dta", clear
 
 merge m:1 grappe menage using "${Benin_EHCVM_W1_created_data}/Benin_EHCVM_W1_hhids.dta", nogen keep (1 3)
@@ -415,7 +415,8 @@ lab var fhh "1= Female-headed household"
 lab var hh_members "Number of household members"
 lab var adulteq "Adult-Equivalent"
 lab var crop_category1 "Food items"
-egen hhid=concat(grappe menage)
+drop hhid
+gen hhid=string(grappe)+"."+string(menage)
 lab var hhid "Household ID"
 
 save "${Benin_EHCVM_W1_created_data}/Benin_EHCVM_W1_food_consumption_value_combined.dta", replace

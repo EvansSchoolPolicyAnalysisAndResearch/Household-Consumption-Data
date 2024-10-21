@@ -413,7 +413,7 @@ lab var fhh "1= Female-headed household"
 lab var hh_members "Number of household members"
 lab var adulteq "Adult-Equivalent"
 lab var crop_category1 "Food items"
-egen hhid=concat(grappe menage)
+gen hhid=string(grappe)+"."+string(menage)
 lab var hhid "Household ID"
 
 save "${CI_EHCVM_W1_created_data}/CI_EHCVM_W1_food_consumption_value_combined.dta", replace

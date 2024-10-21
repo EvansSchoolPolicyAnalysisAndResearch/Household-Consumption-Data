@@ -88,7 +88,11 @@ global wins_upper_thres 99							//  Threshold for winzorization at the top of t
 use "${Mali_EHCVM_W1_raw_data}/ehcvm_ponderations_mli2018.dta", clear
 merge 1:m grappe using "${Mali_EHCVM_W1_raw_data}/s01_me_mli2018.dta", nogen keep (1 3)
 ren hhweight weight
-ren s01q04a age
+ren s01q03c year_birth
+gen age=2018-year_birth
+ren s01q04a age2
+replace age=age2 if age==. 
+replace age=0 if age<0
 ren s01q01 gender
 codebook s01q02, tab(100)
 gen fhh = gender==2 & s01q02==1
@@ -133,7 +137,8 @@ lab var ccf_1ppp "currency conversion factor - 2017 $Private Consumption PPP"
 gen ccf_2ppp = (1 + $Mali_EHCVM_W1_inflation)/ $Mali_EHCVM_W1_gdp_ppp_dollar
 lab var ccf_2ppp "currency conversion factor - 2017 $GDP PPP"
 
-keep grappe menage region department fhh weight hh_members adulteq rural		
+keep grappe menage region department fhh weight hh_members adulteq rural	
+duplicates drop grappe menage, force
 save  "${Mali_EHCVM_W1_created_data}/Mali_EHCVM_W1_hhids.dta", replace
 
  
@@ -416,7 +421,7 @@ lab var fhh "1= Female-headed household"
 lab var hh_members "Number of household members"
 lab var adulteq "Adult-Equivalent"
 lab var crop_category1 "Food items"
-egen hhid=concat(grappe menage)
+gen hhid=string(grappe)+"."+string(menage)
 lab var hhid "Household ID"
 save "${Mali_EHCVM_W1_created_data}/Mali_EHCVM_W1_food_consumption_value_combined.dta", replace
 
