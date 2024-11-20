@@ -47,23 +47,13 @@
     <th>Survey</th>
     <th>Years</th>
  </tr>
-  <tr>
-    <td>Bangladesh</td>
-    <td>Integrated Household Survey (BIHS)</td>
-    <td>2011/12, 2015/16, 2018/19</td>
-  </tr>
    <tr>
     <td>Bénin</td>
     <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM)</td>
     <td>2018/19</td>
   </tr>
   <tr>
-    <td>Burkina Faso</td>
-    <td>Continuous Multisectoral Survey (EMC)</td>
-    <td>2014</td>
-  </tr>
-  <tr>
-    <td> </td>
+    <td> Burkina Faso</td>
     <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM)</td>
     <td>2018/19, 2021/21</td>
   </tr>
@@ -76,11 +66,6 @@
     <td>Ethiopia</td>
     <td>Socioeconomic Panel Survey (ESS)</td>
     <td>2015/16, 2018/19, 2012/22</td>
-  </tr>
-    <tr>
-    <td>Gambia</td>
-    <td>Integrated Household Survey (IHS)</td>
-    <td>2015/16</td>
   </tr>
   <tr>
     <td>Ghana</td>
@@ -98,11 +83,6 @@
     <td>2015/16</td>
   </tr>
   <tr>
-    <td>India</td>
-    <td>Household Consumer Expenditure (HCE)</td>
-    <td>2011/12</td>
-  </tr>
-  <tr>
     <td>Malawi</td>
     <td>Integrated Household Survey (IHS)</td>
     <td>2010/11, 2013, 2016/17, 2019/2020</td>
@@ -117,13 +97,8 @@
     <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM)</td>
     <td>2018/19</td>
   </tr>
-  <tr>
-    <td>Niger</td>
-    <td>Enquête Nationale sur les Conditions de Vie des Ménages et l’Agriculture (ECVMA)</td>
-    <td>2011/12 and 2014/15</td>
-  </tr>
  <tr>
-    <td></td>
+    <td>Niger</td>
     <td>Enquête Harmonisée sur les Conditions de Vie des Ménages (EHCVM)</td>
     <td>2018/19</td>
   </tr>
@@ -131,11 +106,6 @@
     <td>Nigeria</td>
     <td>General Household Survey (GHS)</td>
     <td>2010/22, 2012/13, 2015/16 and 2018/19</td>
-  </tr>
- tr>
-    <td>Pakistan</td>
-    <td>Household Integrated Economic Survey (HIES)</td>
-    <td>2004/05, 2007/08, 2008/09, 2011/12, 2012/13, 2016/17, 2018/19</td>
   </tr>
  <tr>
     <td>Senegal</td>
