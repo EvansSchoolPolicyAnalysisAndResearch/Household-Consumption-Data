@@ -15,9 +15,16 @@
 - **Description:** This dataset includes hhid/grappe menage/hhcode as a unique identifier, along with its location identifiers (e.g. rural, region, zone, department, province, ea, etc.). Other variables created here include: 
     * Female-headed household indicator
     * Household survey weight
+    * Age of household head
     * Number of household members
+    * Number of working-age adults
+    * Number of working-age female adults
+    * Number of working-age male adults
+    * Number of elders
+    * Number of children
     * Adult-equivalent
     * Rural location indicator
+    * survey interview day, month, and year.
 
 ### Consumption
 - **Description:** This dataset includes hhid/grappe menage/hhcode as a unique identifier and constructs food consumption at the crop level by the different sources (from purchases, own production, and gifts). 
