@@ -114,7 +114,21 @@ replace adulteq=0.8 if (age>59 & age!=.) & gender==1
 replace adulteq=0.72 if (age>59 & age!=.) & gender==2
 replace adulteq=. if age==999
 lab var adulteq "Adult-Equivalent"
-collapse (max) fhh (sum) hh_members (sum) adulteq, by(_cluster _hhno)
+
+gen age_hh= age if a1==1
+lab var age_hh "Age of household head"
+gen nadultworking=1 if age>=18 & age<65
+lab var nadultworking "Number of working age adults"
+gen nadultworking_female=1 if age>=18 & age<65 & gender==2 
+lab var nadultworking_female "Number of working age female adults"
+gen nadultworking_male=1 if age>=18 & age<65 & gender==1 
+lab var nadultworking_male "Number of working age male adults"
+gen nchildren=1 if age<=17
+lab var nchildren "Number of children"
+gen nelders=1 if age>=65
+lab var nelders "Number of elders"
+
+collapse (max) fhh age_hh (sum) hh_members (sum) adulteq nadultworking nadultworking_female nadultworking_male nchildren nelders, by(_cluster _hhno)
 
 merge 1:m _cluster _hhno using "${SierraLeone_IHS_W3_raw_data}/slihs2018_consexp.dta", nogen keep (1 3)
 ren _hhno hhid
@@ -122,7 +136,10 @@ ren _cluster ea
 ren  wta_hh weight
 gen rural = (rururb==1)
 lab var rural "1= Rural"
-keep hhid ea region province district stratum weight rural foodexp foodown foodgift consexp adulteq fhh hh_members
+ren month interview_month
+lab var interview_month "Survey interview month"
+
+keep hhid ea region province district stratum weight rural foodexp foodown foodgift consexp adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_month fhh hh_members
 
 *Generating the variable that indicate the level of representativness of the survey (to use for reporting summary stats)
 gen level_representativness=.
@@ -574,7 +591,7 @@ lab var Instrument "Survey name"
 qui gen Year="2018"
 lab var Year "Survey year"
 
-keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
+keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_month fhh fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
 
 *generate GID_1 code to match codes in the SL shapefile
 gen GID_1=""

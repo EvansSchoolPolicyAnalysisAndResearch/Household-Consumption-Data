@@ -112,7 +112,22 @@ replace adulteq=0.8 if (age>59 & age!=.) & gender==1
 replace adulteq=0.72 if (age>59 & age!=.) & gender==2
 replace adulteq=. if age==999
 lab var adulteq "Adult-Equivalent"
-collapse (sum) hh_members adulteq (max) fhh pw_w5, by (household_id)
+
+gen age_hh= age if s1q01==1
+lab var age_hh "Age of household head"
+gen nadultworking=1 if age>=18 & age<65
+lab var nadultworking "Number of working age adults"
+gen nadultworking_female=1 if age>=18 & age<65 & gender==2 
+lab var nadultworking_female "Number of working age female adults"
+gen nadultworking_male=1 if age>=18 & age<65 & gender==1 
+lab var nadultworking_male "Number of working age male adults"
+gen nchildren=1 if age<=17
+lab var nchildren "Number of children"
+gen nelders=1 if age>=65
+lab var nelders "Number of elders"
+ren pw_w5 weight
+
+collapse (sum) hh_members adulteq nadultworking nadultworking_female nadultworking_male nchildren nelders (max) fhh weight age_hh, by (household_id)
 
 merge 1:1 household_id using "$Ethiopia_ESS_W5_raw_data/sect_cover_hh_W5.dta", nogen keep (1 3)
 ren saq01 region
@@ -123,10 +138,18 @@ ren saq05 subcity
 ren saq06 kebele
 ren saq07 ea
 ren saq08 household
-ren pw_w5 weight
 gen rural=(saq14==1)
 lab var rural "1= Rural"
-keep region zone woreda city subcity kebele ea household weight rural household_id fhh hh_members adulteq 
+/*
+ren InterviewStart first_interview_date
+gen interview_year=substr(first_interview_date ,1,4)
+gen interview_month=substr(first_interview_date,6,2)
+gen interview_day=substr(first_interview_date,9,2)
+lab var interview_day "Survey interview day"
+lab var interview_month "Survey interview month"
+lab var interview_year "Survey interview year"
+*/
+keep region zone woreda city subcity kebele ea household weight rural household_id fhh hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders
 destring region zone woreda, replace
 
 *Generating the variable that indicate the level of representativness of the survey (to use for reporting summary stats)
@@ -439,7 +462,7 @@ gen food_purch_unit=food_`f'_unit
 merge m:1 item_code food_purch_unit using "${Ethiopia_ESS_W5_created_data}/Ethiopia_ESS_W5_item_prices_country.dta", nogen keep(1 3)
 replace food_`f'_value=food_`f'_qty*price_unit_median_country if food_`f'_unit==food_purch_unit & food_`f'_value==. & obs_country>10 & obs_country!=.
 
-keep hhid item_code crop_category1 crop_category3 food_`f'_value //SRK addition "crop_category3"
+keep hhid item_code crop_category1 food_`f'_value 
 save "${Ethiopia_ESS_W5_created_data}/Ethiopia_ESS_W5_consumption_purchase_`f'.dta", replace
 restore
 }
@@ -508,7 +531,7 @@ lab var Instrument "Survey name"
 qui gen Year="2021/22"
 lab var Year "Survey year"
 
-keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
+keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
 
 *generate GID_1 code to match codes in the Ethiopia shapefile
 gen GID_1=""

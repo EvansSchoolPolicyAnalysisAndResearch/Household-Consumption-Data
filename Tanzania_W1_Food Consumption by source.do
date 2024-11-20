@@ -55,7 +55,7 @@ global directory				"\\netid.washington.edu\wfs\EvansEPAR\Project\EPAR\Working F
 
 //set directories
 *These paths correspond to the folders where the raw data files are located and where the created data and final data will be stored.
-global Tanzania_NPS_W1_raw_data 	   	 	"$directory/Tanzania NPS/Tanzania NPS Wave 1/Raw DTA Files/TZA_2008_NPS1_v02_M_STATA_English_labels"
+global Tanzania_NPS_W1_raw_data 	   	 	"$directory/Tanzania NPS/Tanzania NPS Wave 1/Raw DTA Files"
 global Tanzania_NPS_W1_created_data  	"//netid.washington.edu/wfs/EvansEPAR/Project/EPAR/Working Files/439 - Household Food Consumption by Source/Food consumption by source/Consumption Data Curation/created_data"
 global final_data  		"//netid.washington.edu/wfs/EvansEPAR/Project/EPAR/Working Files/439 - Household Food Consumption by Source/Food consumption by source/Consumption Data Curation/final_data"
 
@@ -109,14 +109,35 @@ replace adulteq=0.88 if (age<60 & age>18) & gender==2
 replace adulteq=0.8 if (age>59 & age!=.) & gender==1
 replace adulteq=0.72 if (age>59 & age!=.) & gender==2
 lab var adulteq "Adult-Equivalent"
-collapse (sum) hh_members adulteq (max) fhh, by (hhid)
+
+gen age_hh= age if sbq5==1
+lab var age_hh "Age of household head"
+gen nadultworking=1 if age>=18 & age<65
+lab var nadultworking "Number of working age adults"
+gen nadultworking_female=1 if age>=18 & age<65 & gender==2 
+lab var nadultworking_female "Number of working age female adults"
+gen nadultworking_male=1 if age>=18 & age<65 & gender==1 
+lab var nadultworking_male "Number of working age male adults"
+gen nchildren=1 if age<=17
+lab var nchildren "Number of children"
+gen nelders=1 if age>=65
+lab var nelders "Number of elders"
+
+collapse (max) fhh age_hh (sum) hh_members (sum) adulteq nadultworking nadultworking_female nadultworking_male nchildren nelders, by(hhid)
 
 merge 1:1 hhid using "${Tanzania_NPS_W1_raw_data}\SEC_A_T.dta", nogen keep (1 3)
 rename hh_weight_trimmed weight
 ren rural oldrural
 gen rural=oldrural=="Rural"
 lab var rural "1=Household lives in a rural area"
-keep hhid region district ward ea rural weight strataid clusterid hh_members adulteq fhh
+
+ren sa2q18m interview_month
+ren sa2q18y interview_year
+lab var interview_month "Survey interview month"
+lab var interview_year "Survey interview year"
+
+
+keep hhid region district ward ea rural weight strataid clusterid hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_month interview_year fhh
 
 *Generating the variable that indicate the level of representativness of the survey (to use for reporting summary stats)
 gen level_representativness=.
@@ -413,7 +434,7 @@ lab var Instrument "Survey name"
 qui gen Year="2008/09"
 lab var Year "Survey year"
 
-keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
+keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_month interview_year fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
 
 *generate GID_1 code to match codes in the Benin shapefile
 gen GID_1=""

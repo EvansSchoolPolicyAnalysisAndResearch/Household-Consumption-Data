@@ -111,7 +111,21 @@ replace adulteq=0.88 if (age<60 & age>18) & gender==2
 replace adulteq=0.8 if (age>59 & age!=.) & gender==1
 replace adulteq=0.72 if (age>59 & age!=.) & gender==2
 lab var adulteq "Adult-Equivalent"
-collapse (sum) hh_members adulteq (max) fhh, by (region province zd menage)
+
+gen age_hh= age if B5==1
+lab var age_hh "Age of household head"
+gen nadultworking=1 if age>=18 & age<65
+lab var nadultworking "Number of working age adults"
+gen nadultworking_female=1 if age>=18 & age<65 & gender==2 
+lab var nadultworking_female "Number of working age female adults"
+gen nadultworking_male=1 if age>=18 & age<65 & gender==1 
+lab var nadultworking_male "Number of working age male adults"
+gen nchildren=1 if age<=17
+lab var nchildren "Number of children"
+gen nelders=1 if age>=65
+lab var nelders "Number of elders"
+
+collapse (sum) hh_members adulteq nadultworking nadultworking_female nadultworking_male nchildren nelders (max) fhh age_hh, by (region province zd menage)
 
 merge 1:m region province zd menage using "${Burkina_EMC_W1_raw_data}//emc2014_p2_conso7jours_16032015", nogen keep(3) keepusing (hhweight hhid milieu strate)
 ren hhweight weight
@@ -189,7 +203,8 @@ lab var ccf_1ppp "currency conversion factor - 2017 $Private Consumption PPP"
 gen ccf_2ppp = (1 + $Burkina_EMC_W1_inflation)/ $Burkina_EMC_W1_gdp_ppp_dollar
 lab var ccf_2ppp "currency conversion factor - 2017 $GDP PPP"
 
-keep hhid region province zd menage province strate fhh hh_members adulteq rural weight fhh 
+
+keep hhid region province zd menage province strate fhh hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders rural weight fhh 
  
 save "${Burkina_EMC_W1_created_data}/Burkina_EMC_W1_hhids.dta", replace
 
@@ -525,8 +540,9 @@ qui gen Instrument="Burkina LSMS-ISA/EMC W1"
 lab var Instrument "Survey name"
 qui gen Year="2014"
 lab var Year "Survey year"
+lab var weight "Household weight"
 
-keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
+keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
 
 *generate GID_1 code to match codes in the BF shapefile
 gen GID_1=""
@@ -606,6 +622,7 @@ foreach x of varlist food_consu_value food_purch_value food_prod_value food_gift
 ren hhid old_hhid
 gen hhid=string(old_hhid)
 drop old_hhid
+lab var hhid "Household ID"
 
 compress
 save "${final_data}/Burkina_EMC_W1_food_consumption_value_by_source.dta", replace

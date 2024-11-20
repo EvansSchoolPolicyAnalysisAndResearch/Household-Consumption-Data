@@ -114,7 +114,21 @@ replace adulteq=0.8 if (age>59 & age!=.) & gender==1
 replace adulteq=0.72 if (age>59 & age!=.) & gender==2
 replace adulteq=. if age==999
 lab var adulteq "Adult-Equivalent"
-collapse (max) fhh weight (sum) hh_members adulteq, by(hid)
+
+gen age_hh= age if s1q6==1
+lab var age_hh "Age of household head"
+gen nadultworking=1 if age>=18 & age<65
+lab var nadultworking "Number of working age adults"
+gen nadultworking_female=1 if age>=18 & age<65 & gender==2 
+lab var nadultworking_female "Number of working age female adults"
+gen nadultworking_male=1 if age>=18 & age<65 & gender==1 
+lab var nadultworking_male "Number of working age male adults"
+gen nchildren=1 if age<=17
+lab var nchildren "Number of children"
+gen nelders=1 if age>=65
+lab var nelders "Number of elders"
+
+collapse (max) fhh weight age_hh (sum) hh_members adulteq nadultworking nadultworking_female nadultworking_male nchildren nelders, by(hid)
 
 merge 1:m hid using "${Gambia_IHS_W3_raw_data}/Part A Section 0-HH particulars.dta", nogen keep (1 3)
 ren hid hhid
@@ -133,7 +147,7 @@ gen ccf_2ppp = (1 + $Gambia_IHS_W3_inflation)/ $Gambia_IHS_W3_gdp_ppp_dollar
 lab var ccf_2ppp "currency conversion factor - 2017 $GDP PPP"
 	
 		
-keep hhid ea lga district settlement area weight rural adulteq fhh hh_members
+keep hhid ea lga district settlement area weight rural adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders fhh hh_members
 		
 save  "${Gambia_IHS_W3_created_data}/Gambia_IHS_W3_hhids.dta", replace
 
@@ -497,7 +511,7 @@ lab var Instrument "Survey name"
 qui gen Year="2015"
 lab var Year "Survey year"
 
-keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
+keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
 
 
 *generate GID_1 code to match codes in the Gambia shapefile

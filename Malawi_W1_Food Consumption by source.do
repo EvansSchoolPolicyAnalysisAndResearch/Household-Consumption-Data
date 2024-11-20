@@ -110,7 +110,21 @@ replace adulteq=0.88 if (age<60 & age>18) & gender==2
 replace adulteq=0.8 if (age>59 & age!=.) & gender==1
 replace adulteq=0.72 if (age>59 & age!=.) & gender==2
 lab var adulteq "Adult-Equivalent"
-collapse (sum) hh_members adulteq (max) fhh, by (case_id)
+
+gen age_hh= age if hh_b04==1
+lab var age_hh "Age of household head"
+gen nadultworking=1 if age>=18 & age<65
+lab var nadultworking "Number of working age adults"
+gen nadultworking_female=1 if age>=18 & age<65 & gender==2 
+lab var nadultworking_female "Number of working age female adults"
+gen nadultworking_male=1 if age>=18 & age<65 & gender==1 
+lab var nadultworking_male "Number of working age male adults"
+gen nchildren=1 if age<=17
+lab var nchildren "Number of children"
+gen nelders=1 if age>=65
+lab var nelders "Number of elders"
+
+collapse (sum) hh_members adulteq nadultworking nadultworking_female nadultworking_male nchildren nelders (max) fhh age_hh, by (case_id)
 
 merge 1:1 case_id using "${Malawi_IHS_W1_raw_data}\hh_mod_a_filt.dta", nogen keep (1 3)
 rename hh_a01 district
@@ -120,6 +134,15 @@ rename hh_wgt weight
 rename case_id hhid
 gen rural = (reside==2)
 lab var rural "1=Household lives in a rural area"
+
+ren hh_a23a_1 interview_day
+ren hh_a23b_1 interview_month
+ren hh_a23c_1 interview_year
+lab var interview_day "Survey interview day"
+lab var interview_month "Survey interview month"
+lab var interview_year "Survey interview year"
+
+
 codebook district, tab(100)
 gen region=.
 replace region=1 if inrange(district, 101,107)
@@ -134,7 +157,7 @@ replace stratum=3 if region== 2 | rural==0
 replace stratum=4 if region== 2 | rural==1
 replace stratum=5 if region== 3 | rural==0
 replace stratum=6 if region== 3 | rural==1
-keep hhid stratum district ta ea rural region weight fhh hh_members adulteq
+keep hhid stratum district ta ea rural region weight fhh hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_day interview_month interview_year
 
 *Generating the variable that indicate the level of representativness of the survey (to use for reporting summary stats)
 gen level_representativness=.
@@ -807,7 +830,7 @@ lab var Instrument "Survey name"
 qui gen Year="2010/11"
 lab var Year "Survey year"
 
-keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
+keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_day interview_month interview_year fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
 
 *generate GID_1 code to match codes in the Malawi shapefile
 gen GID_1=""

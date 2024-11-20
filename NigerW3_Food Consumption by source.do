@@ -88,7 +88,11 @@ use "${Niger_EHCVM_W1_raw_data}/ehcvm_ponderations_ner2018.dta", clear
 merge 1:m grappe using "${Niger_EHCVM_W1_raw_data}/s01_me_ner2018.dta", nogen keep (1 3)
 ren hhweight weight
 ren s01q03c year_birth
-gen age=2018-year_birth
+replace year_birth=. if year_birth==9999.00
+gen age=2019-year_birth
+replace age=. if age==-1 
+replace age =s01q04a if age==.
+
 ren s01q04a age2
 replace age=age2 if age==. 
 replace age=0 if age<0
@@ -116,7 +120,21 @@ replace adulteq=0.8 if (age>59 & age!=.) & gender==1
 replace adulteq=0.72 if (age>59 & age!=.) & gender==2
 replace adulteq=. if age==999
 lab var adulteq "Adult-Equivalent"
-collapse (max) fhh weight (sum) hh_members adulteq, by(grappe menage)
+
+gen age_hh= age if s01q02==1
+lab var age_hh "Age of household head"
+gen nadultworking=1 if age>=18 & age<65
+lab var nadultworking "Number of working age adults"
+gen nadultworking_female=1 if age>=18 & age<65 & gender==2 
+lab var nadultworking_female "Number of working age female adults"
+gen nadultworking_male=1 if age>=18 & age<65 & gender==1 
+lab var nadultworking_male "Number of working age male adults"
+gen nchildren=1 if age<=17
+lab var nchildren "Number of children"
+gen nelders=1 if age>=65
+lab var nelders "Number of elders"
+
+collapse (max) fhh weight age_hh (sum) hh_members adulteq nadultworking nadultworking_female nadultworking_male nchildren nelders, by(grappe menage)
 
 merge 1:m grappe menage using "${Niger_EHCVM_W1_raw_data}/s00_me_ner2018.dta", nogen keep (1 3)
 ren s00q01 region 
@@ -125,6 +143,15 @@ ren s00q02 department
 gen rural = (s00q04 ==2)
 lab var rural "1= Rural"
 
+ren s00q23a first_interview_date
+gen interview_year=substr(first_interview_date,1,4)
+gen interview_month=substr(first_interview_date,6,2)
+gen interview_day=substr(first_interview_date,9,2)
+destring interview_day interview_month interview_year, replace
+
+lab var interview_day "Survey interview day"
+lab var interview_month "Survey interview month"
+lab var interview_year "Survey interview year"
 
 ****Currency Conversion Factors****
 gen ccf_loc = (1 + $Niger_EHCVM_W1_inflation) 
@@ -136,7 +163,7 @@ lab var ccf_1ppp "currency conversion factor - 2017 $Private Consumption PPP"
 gen ccf_2ppp = (1 + $Niger_EHCVM_W1_inflation)/ $Niger_EHCVM_W1_gdp_ppp_dollar
 lab var ccf_2ppp "currency conversion factor - 2017 $GDP PPP"
 
-keep grappe menage region department fhh weight hh_members adulteq rural		
+keep grappe menage region department fhh weight hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_day interview_month interview_year rural		
 save  "${Niger_EHCVM_W1_created_data}/Niger_EHCVM_W1_hhids.dta", replace
 
 
@@ -443,7 +470,7 @@ lab var Instrument "Survey name"
 qui gen Year="2018/19"
 lab var Year "Survey year"
 
-keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
+keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_day interview_month interview_year fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
 
 
 *generate GID_1 code to match codes in the Benin shapefile

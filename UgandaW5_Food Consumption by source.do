@@ -109,7 +109,22 @@ replace adulteq=0.88 if (age<60 & age>18) & gender==2
 replace adulteq=0.8 if (age>59 & age!=.) & gender==1
 replace adulteq=0.72 if (age>59 & age!=.) & gender==2
 lab var adulteq "Adult-Equivalent"
-collapse (sum) hh_members adulteq (max) fhh, by (hhid)
+
+gen age_hh= age if h2q4==1
+lab var age_hh "Age of household head"
+gen nadultworking=1 if age>=18 & age<65
+lab var nadultworking "Number of working age adults"
+gen nadultworking_female=1 if age>=18 & age<65 & gender==2 
+lab var nadultworking_female "Number of working age female adults"
+gen nadultworking_male=1 if age>=18 & age<65 & gender==1 
+lab var nadultworking_male "Number of working age male adults"
+gen nchildren=1 if age<=17
+lab var nchildren "Number of children"
+gen nelders=1 if age>=65
+lab var nelders "Number of elders"
+
+collapse (max) fhh age_hh (sum) hh_members adulteq nadultworking nadultworking_female nadultworking_male nchildren nelders, by(hhid)
+
 ren hhid HHID
 merge 1:1 HHID using "${Uganda_UNPS_W5_raw_data}/AGSEC1", nogen
 merge m:1 HHID using "${Uganda_UNPS_W5_raw_data}/gsec1.dta"
@@ -124,6 +139,7 @@ label var ea "Enumeration Area"
 rename h_xwgt_W5 weight //using the household crossectional weight for w5
 rename HHID hhid
 recast str32 hhid, force
+
 
 
 *Generating the variable that indicate the level of representativness of the survey (to use for reporting summary stats)
@@ -144,7 +160,15 @@ lab define lrep 1 "Kampala City"  ///
 						
 lab value level_representativness	lrep							
 tab level_representativness
-keep hhid region weight district district_name scounty_code subcounty_name parish_code parish_name village ea rural pweight strataid clusterid sregion fhh hh_members adulteq
+
+ren day interview_day
+ren month interview_month
+ren year interview_year
+lab var interview_day "Survey interview day"
+lab var interview_month "Survey interview month"
+lab var interview_year "Survey interview year"
+
+keep hhid region weight district district_name scounty_code subcounty_name parish_code parish_name village ea rural pweight strataid clusterid sregion fhh hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_day interview_month interview_year
 
 
 ****Currency Conversion Factors****
@@ -846,7 +870,7 @@ lab var Instrument "Survey name"
 qui gen Year="2015/16"
 lab var Year "Survey year"
 
-keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
+keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_day interview_month interview_year fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
 
 *generate GID_1 code to match codes in the Benin shapefile
 gen GID_1=""

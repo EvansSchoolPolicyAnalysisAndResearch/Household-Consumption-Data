@@ -113,6 +113,20 @@ gen rural = (region==2)
 lab var rural "1=Household lives in a rural area"
 *egen hhid=concat(hhcode idc)
 
+gen age_hh= age if s1aq02==1
+lab var age_hh "Age of household head"
+gen nadultworking=1 if age>=18 & age<65
+lab var nadultworking "Number of working age adults"
+gen nadultworking_female=1 if age>=18 & age<65 & gender==2 
+lab var nadultworking_female "Number of working age female adults"
+gen nadultworking_male=1 if age>=18 & age<65 & gender==1 
+lab var nadultworking_male "Number of working age male adults"
+gen nchildren=1 if age<=17
+lab var nchildren "Number of children"
+gen nelders=1 if age>=65
+lab var nelders "Number of elders"
+
+
 *Generating the variable that indicate the level of representativness of the survey (to use for reporting summary stats)
 *Representative at the county level.
 gen level_representativness=.
@@ -137,8 +151,12 @@ lab define lrep 11 "Punjab - Rural"  ///
 lab value level_representativness	lrep
 tab level_representativness
 sort hhcode idc 
-collapse (max) fhh rural level_representativness province weight (sum) hh_members adulteq, by(psu hhcode)
 
+collapse (max) fhh rural age_hh level_representativness province weight (sum) hh_members adulteq nadultworking nadultworking_female nadultworking_male nchildren nelders, by(psu hhcode)
+
+
+merge 1:1 psu hhcode using "${Pakistan_HIES_W3_raw_data}\survey information.dta", nogen keepusing (ver_date)
+x
 
 ****Currency Conversion Factors***
 gen ccf_loc = (1 + $Pakistan_HIES_W3_inflation) 
@@ -289,7 +307,7 @@ foreach v of varlist * {
 		local l`v': var label `v'
 }
 
-collapse (mean) food_consu_value food_purch_value food_prod_value food_gift_value ,by(hhcode province psu fhh hh_members adulteq rural weight crop_category1)
+collapse (mean) food_consu_value food_purch_value food_prod_value food_gift_value ,by(hhcode province psu fhh hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_day interview_month interview_year rural weight crop_category1)
 merge m:1 hhcode using "${Pakistan_HIES_W3_created_data}/Pakistan_HIES_W3_hhids.dta", nogen keep (1 3)
 
 foreach v of varlist * {
@@ -320,7 +338,7 @@ lab var Instrument "Survey name"
 qui gen Year="2007/08"
 lab var Year "Survey year"
 
-keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
+keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_day interview_month interview_year fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
 
 *generate GID_1 code to match codes in the Pakistan shapefile
 gen GID_1=""

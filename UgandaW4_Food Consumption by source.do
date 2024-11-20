@@ -108,7 +108,21 @@ replace adulteq=0.88 if (age<60 & age>18) & gender==2
 replace adulteq=0.8 if (age>59 & age!=.) & gender==1
 replace adulteq=0.72 if (age>59 & age!=.) & gender==2
 lab var adulteq "Adult-Equivalent"
-collapse (sum) hh_members adulteq (max) fhh, by (HHID)
+
+gen age_hh= age if h2q4==1
+lab var age_hh "Age of household head"
+gen nadultworking=1 if age>=18 & age<65
+lab var nadultworking "Number of working age adults"
+gen nadultworking_female=1 if age>=18 & age<65 & gender==2 
+lab var nadultworking_female "Number of working age female adults"
+gen nadultworking_male=1 if age>=18 & age<65 & gender==1 
+lab var nadultworking_male "Number of working age male adults"
+gen nchildren=1 if age<=17
+lab var nchildren "Number of children"
+gen nelders=1 if age>=65
+lab var nelders "Number of elders"
+
+collapse (max) fhh age_hh (sum) hh_members adulteq nadultworking nadultworking_female nadultworking_male nchildren nelders, by(HHID)
 
 merge 1:1 HHID using "${Uganda_UNPS_W4_raw_data}/GSEC1", nogen
 ren h1aq1a district 
@@ -120,7 +134,16 @@ ren wgt_X weight //wgt_X  is cross-sectional weight for UNPS 2013-2014, applies 
 gen rural= (urban==0)
 ren HHID hhid
 lab var rural "1=Household lives in a rural area"
-keep hhid region sregion district county county_name parish parish_name ea weight rural fhh hh_members adulteq
+
+ren day interview_day
+ren month interview_month
+ren year interview_year
+lab var interview_day "Survey interview day"
+lab var interview_month "Survey interview month"
+lab var interview_year "Survey interview year"
+
+keep hhid region sregion district county county_name parish parish_name ea weight rural fhh hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_day interview_month interview_year
+
 
 
 *Generating the variable that indicate the level of representativness of the survey (to use for reporting summary stats)
@@ -791,7 +814,7 @@ lab var Instrument "Survey name"
 qui gen Year="2013/14"
 lab var Year "Survey year"
 
-keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
+keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_day interview_month interview_year fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
 
 
 *generate GID_1 code to match codes in the Benin shapefile

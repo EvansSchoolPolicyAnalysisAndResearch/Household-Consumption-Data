@@ -90,6 +90,7 @@ global wins_upper_thres 99							//  Threshold for winzorization at the top of t
 ********************************************************************************
 use "${Nigeria_GHS_W3_raw_data}/sect1_plantingw3.dta", clear
 ren s1q6 age
+replace age=. if age==999
 ren s1q2 gender
 gen fhh =gender==2 & s1q3==1
 lab var fhh "1= Female-headed household"
@@ -116,9 +117,33 @@ lab var adulteq "Adult-Equivalent"
 gen rural = (sector==2)
 lab var rural "1= Rural"
 
-collapse (sum) hh_members adulteq (max) fhh rural, by (hhid)
-merge m:1 hhid using "${Nigeria_GHS_W3_raw_data}/HHTrack.dta", nogen keep (1 3)
-keep hhid zone state lga ea wt_wave3 rural fhh hh_members adulteq
+gen age_hh= age if s1q3==1
+lab var age_hh "Age of household head"
+gen nadultworking=1 if age>=18 & age<65
+lab var nadultworking "Number of working age adults"
+gen nadultworking_female=1 if age>=18 & age<65 & gender==2 
+lab var nadultworking_female "Number of working age female adults"
+gen nadultworking_male=1 if age>=18 & age<65 & gender==1 
+lab var nadultworking_male "Number of working age male adults"
+gen nchildren=1 if age<=17
+lab var nchildren "Number of children"
+gen nelders=1 if age>=65
+lab var nelders "Number of elders"
+
+collapse (sum) hh_members adulteq nadultworking nadultworking_female nadultworking_male nchildren nelders (max) fhh age_hh rural, by (hhid)
+
+merge 1:1 hhid using "${Nigeria_GHS_W3_raw_data}/HHTrack.dta", nogen keep (1 3)
+merge 1:1 hhid using "${Nigeria_GHS_W3_raw_data}/secta_harvestw3.dta"
+
+ren saq13d interview_day
+ren saq13m interview_month
+ren saq13y interview_year
+lab var interview_day "Survey interview day"
+lab var interview_month "Survey interview month"
+lab var interview_year "Survey interview year"
+
+
+keep hhid zone state lga ea wt_wave3 rural fhh hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_day interview_month interview_year
 ren wt_wave3 weight
 
 *Generating the variable that indicate the level of representativness of the survey (to use for reporting summary stats)
@@ -875,7 +900,7 @@ foreach v of varlist * {
 		local l`v': var label `v'
 }
 
-collapse (mean) food_consu_value food_purch_value food_prod_value food_gift_value ,by(hhid zone state lga ea fhh hh_members adulteq rural weight crop_category1 ccf_loc ccf_usd ccf_1ppp ccf_2ppp)
+collapse (mean) food_consu_value food_purch_value food_prod_value food_gift_value ,by(hhid zone state lga ea fhh hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_day interview_month interview_year rural weight crop_category1 ccf_loc ccf_usd ccf_1ppp ccf_2ppp)
 
 foreach v of varlist * {
 	label var `v' "`l`v''" 
@@ -906,7 +931,7 @@ lab var Instrument "Survey name"
 qui gen Year="2015/16"
 lab var Year "Survey year"
 
-keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
+keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_day interview_month interview_year fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
 
 *generate GID_1 code to match codes in the Nigeria shapefile
 gen GID_1=""

@@ -111,7 +111,21 @@ replace adulteq=0.8 if (age>59 & age!=.) & gender==1
 replace adulteq=0.72 if (age>59 & age!=.) & gender==2
 replace adulteq=. if age==999
 lab var adulteq "Adult-Equivalent"
-collapse (max) fhh (sum) hh_members adulteq, by(hid)
+
+gen age_hh= age if ms01q02==1
+lab var age_hh "Age of household head"
+gen nadultworking=1 if age>=18 & age<65
+lab var nadultworking "Number of working age adults"
+gen nadultworking_female=1 if age>=18 & age<65 & gender==2 
+lab var nadultworking_female "Number of working age female adults"
+gen nadultworking_male=1 if age>=18 & age<65 & gender==1 
+lab var nadultworking_male "Number of working age male adults"
+gen nchildren=1 if age<=17
+lab var nchildren "Number of children"
+gen nelders=1 if age>=65
+lab var nelders "Number of elders"
+
+collapse (max) fhh age_hh (sum) hh_members adulteq nadultworking nadultworking_female nadultworking_male nchildren nelders, by(hid)
 
 merge m:1 hid using "${Niger_ECVMA_W1_raw_data}\ecvmasection00_p1_en.dta", nogen
 ren hid hhid
@@ -126,12 +140,20 @@ merge m:1  grappe region using "$Niger_ECVMA_W1_raw_data/Ponderation_Finale_31_0
 ren ms00q15 old_rural3 // BT 11.02.2021 note: this variable specifies three different types of areas (Niamey or communaute urbaine, urban, and rural), whereas urbanrur in the ponderation dta file only specifies rural vs urban 
 gen rural = . 
 replace rural=0 if urbrur==1
-replace rural=1 if urbrur==2
+replace rural=1 if urbrur==2 
 ren urbrur old_rural2
 lab var rural "1=Household lives in a rural area"
 rename hhweight weight
 
-keep commune department ea grappe hhid household region rural strate village wave zae commune weight strate fhh hh_members adulteq
+ren ms00q03aj interview_day
+ren ms00q03am interview_month
+ren ms00q03aa interview_year
+replace interview_year=2011 if interview_year==11
+lab var interview_day "Survey interview day"
+lab var interview_month "Survey interview month"
+lab var interview_year "Survey interview year"
+
+keep commune department ea grappe hhid household region rural strate village wave zae commune weight strate fhh hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_day interview_month interview_year
 destring department, replace
 
 *Generating the variable that indicate the level of representativness of the survey (to use for reporting summary stats)
@@ -969,7 +991,7 @@ foreach v of varlist * {
 		local l`v': var label `v'
 }
 
-collapse (sum) food_consu_value food_purch_value food_prod_value food_gift_value, by(hhid region department commune fhh hh_members adulteq rural weight crop_category1)
+collapse (sum) food_consu_value food_purch_value food_prod_value food_gift_value, by(hhid region department commune fhh hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_day interview_month interview_year rural weight crop_category1)
 
 foreach v of varlist * {
 	label var `v' "`l`v''" 
@@ -1002,7 +1024,7 @@ lab var Instrument "Survey name"
 qui gen Year="2011"
 lab var Year "Survey year"
 
-keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
+keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_day interview_month interview_year fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
 
 *generate GID_1 code to match codes in the Benin shapefile
 gen GID_1=""

@@ -1,7 +1,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------
 *Title/Purpose 	: This do.file was developed by the Evans School Policy Analysis & Research Group (EPAR) 
 				 for the construction of a set of household fod consumption by food categories and source
-				 (purchased, own production and gifts) indicators using the Niger Enquête Nationale sur les Conditions de Vie des Ménages et l'Agriculture (ECVMA) (2011-12)
+				 (purchased, own production and gifts) indicators using the Niger Enquête Nationale sur les Conditions de Vie des Ménages et l'Agriculture (ECVMA) (2014-15)
 				 
 *Author(s)		: Amaka Nnaji, Didier Alia & C. Leigh Anderson
 
@@ -111,8 +111,22 @@ replace adulteq=0.8 if (age>59 & age!=.) & gender==1
 replace adulteq=0.72 if (age>59 & age!=.) & gender==2
 replace adulteq=. if age==999
 lab var adulteq "Adult-Equivalent"
-collapse (max) fhh (sum) hh_members adulteq, by(GRAPPE MENAGE EXTENSION)
-egen hhid=concat(GRAPPE MENAGE EXTENSION)
+
+gen age_hh= age if MS01Q02==1
+lab var age_hh "Age of household head"
+gen nadultworking=1 if age>=18 & age<65
+lab var nadultworking "Number of working age adults"
+gen nadultworking_female=1 if age>=18 & age<65 & gender==2 
+lab var nadultworking_female "Number of working age female adults"
+gen nadultworking_male=1 if age>=18 & age<65 & gender==1 
+lab var nadultworking_male "Number of working age male adults"
+gen nchildren=1 if age<=17
+lab var nchildren "Number of children"
+gen nelders=1 if age>=65
+lab var nelders "Number of elders"
+
+collapse (max) fhh age_hh (sum) hh_members adulteq nadultworking nadultworking_female nadultworking_male nchildren nelders, by(GRAPPE MENAGE EXTENSION)
+gen hhid=string(GRAPPE)+"."+string(MENAGE)+"."+string(EXTENSION)
 
 merge m:1  GRAPPE MENAGE EXTENSION using "${Niger_ECVMA_W2_raw_data}/ECVMA2_MS00P1.dta", nogen
 ren MS00Q10 region
@@ -129,7 +143,29 @@ ren urbrur old_rural2
 lab var rural "1=Household lives in a rural area"
 rename hhweight weight
 
-keep hhid commune department ea GRAPPE MENAGE EXTENSION hhid region rural wave zae weight fhh hh_members adulteq
+ren MS00Q03A first_interview_date
+gen first_interview_date_str = string(first_interview_date, "%15.0f") 
+gen len=strlen(first_interview_date_str)
+
+gen interview_day1=substr(first_interview_date_str,1,2) if len==8
+gen interview_month1=substr(first_interview_date_str,3,2) if len==8
+gen interview_year1=substr(first_interview_date_str,5,4) if len==8
+
+gen interview_day2=substr(first_interview_date_str,1,1) if len==7
+gen interview_month2=substr(first_interview_date_str,2,2) if len==7
+gen interview_year2=substr(first_interview_date_str,4,4) if len==7
+
+gen interview_day=interview_day1+interview_day2
+gen interview_month=interview_month1+interview_month2
+gen interview_year=interview_year1+interview_year2
+
+destring interview_day interview_month interview_year, replace
+drop interview_day1 interview_day2 interview_month1 interview_month2 interview_year1 interview_year2
+lab var interview_day "Survey interview day"
+lab var interview_month "Survey interview month"
+lab var interview_year "Survey interview year"
+
+keep hhid commune department ea GRAPPE MENAGE EXTENSION hhid region rural wave zae weight fhh hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_day interview_month interview_year
 destring department, replace
 
 *Generating the variable that indicates the level of representativness of the survey (to use for reporting summary stats)
@@ -188,7 +224,7 @@ save "${Niger_ECVMA_W2_created_data}/Niger_ECVMA_W2_hhids.dta", replace
 *CONSUMPTION
 ******************************************************************************** 
 use "${Niger_ECVMA_W2_raw_data}/ECVMA2_MS12P1", clear
-egen hhid=concat(GRAPPE MENAGE EXTENSION)
+gen hhid=string(GRAPPE)+"."+string(MENAGE)+"."+string(EXTENSION)
 ren MS12Q01 item_code
 label list MS12Q01
 
@@ -406,7 +442,7 @@ drop if food_consu_qty==0  | food_consu_qty==.
 gen price_unit= food_purch_value/food_purch_qty
 recode price_unit (0=.)
 
-merge m:1 hhid GRAPPE MENAGE EXTENSION using "${Niger_ECVMA_W2_created_data}/Niger_ECVMA_W2_hhids.dta", nogen keep (1 3)
+merge m:1 GRAPPE MENAGE EXTENSION using "${Niger_ECVMA_W2_created_data}/Niger_ECVMA_W2_hhids.dta", nogen keep (1 3)
 
 save "${Niger_ECVMA_W2_created_data}/Niger_ECVMA_W2_consumption_purchase_PP.dta", replace
 
@@ -580,7 +616,7 @@ save "${Niger_ECVMA_W2_created_data}/Niger_ECVMA_W2_food_consumption_value_PP.dt
 
 *HARVEST 
 use "${Niger_ECVMA_W2_raw_data}/ECVMA2_MS12P2", clear
-egen hhid=concat(GRAPPE MENAGE EXTENSION)
+gen hhid=string(GRAPPE)+"."+string(MENAGE)+"."+string(EXTENSION)
 ren MS12Q01 item_code
 label list MS12Q01
 
@@ -798,7 +834,7 @@ drop if food_consu_qty==0  | food_consu_qty==.
 gen price_unit= food_purch_value/food_purch_qty
 recode price_unit (0=.)
 
-merge m:1 hhid GRAPPE MENAGE EXTENSION using "${Niger_ECVMA_W2_created_data}/Niger_ECVMA_W2_hhids.dta", nogen keep (1 3)
+merge m:1 GRAPPE MENAGE EXTENSION using "${Niger_ECVMA_W2_created_data}/Niger_ECVMA_W2_hhids.dta", nogen keep (1 3)
 
 save "${Niger_ECVMA_W2_created_data}/Niger_ECVMA_W2_consumption_purchase_PH.dta", replace
 
@@ -875,7 +911,7 @@ save "${Niger_ECVMA_W2_created_data}/Niger_ECVMA_W2_item_prices_country_PH.dta",
 use "${Niger_ECVMA_W2_created_data}/Niger_ECVMA_W2_consumption_purchase_PH.dta", clear
 
 
-merge m:1 hhid GRAPPE MENAGE EXTENSION using "${Niger_ECVMA_W2_created_data}/Niger_ECVMA_W2_hhids.dta", nogen keep (1 3)
+merge m:1 GRAPPE MENAGE EXTENSION using "${Niger_ECVMA_W2_created_data}/Niger_ECVMA_W2_hhids.dta", nogen keep (1 3)
 gen food_purch_unit_old=food_purch_unit_new
 
 duplicates drop hhid item_code crop_category1, force
@@ -948,7 +984,7 @@ save "${Niger_ECVMA_W2_created_data}/Niger_ECVMA_W2_food_home_consumption_value_
 
 
 use "${Niger_ECVMA_W2_created_data}/Niger_ECVMA_W2_food_home_consumption_value_PH.dta", clear
-merge m:1 hhid GRAPPE MENAGE EXTENSION using "${Niger_ECVMA_W2_created_data}/Niger_ECVMA_W2_hhids.dta", nogen keep(1 3)
+merge m:1 GRAPPE MENAGE EXTENSION using "${Niger_ECVMA_W2_created_data}/Niger_ECVMA_W2_hhids.dta", nogen keep(1 3)
 
 *convert to annual value by multiplying with 52
 replace food_consu_value=food_consu_value*52
@@ -973,13 +1009,13 @@ save "${Niger_ECVMA_W2_created_data}/Niger_ECVMA_W2_food_consumption_value_PH.dt
  *Average PP and PH
 use "${Niger_ECVMA_W2_created_data}/Niger_ECVMA_W2_food_consumption_value_PP.dta", clear
 append using "${Niger_ECVMA_W2_created_data}/Niger_ECVMA_W2_food_consumption_value_PH.dta"
-merge m:1 hhid GRAPPE MENAGE EXTENSION using "${Niger_ECVMA_W2_created_data}/Niger_ECVMA_W2_hhids.dta", nogen keep(1 3)
+merge m:1 GRAPPE MENAGE EXTENSION using "${Niger_ECVMA_W2_created_data}/Niger_ECVMA_W2_hhids.dta", nogen keep(1 3)
 
 foreach v of varlist * {
 		local l`v': var label `v'
 }
 
-collapse (sum) food_consu_value food_purch_value food_prod_value food_gift_value, by(hhid GRAPPE MENAGE EXTENSION region department commune fhh hh_members adulteq rural weight crop_category1)
+collapse (sum) food_consu_value food_purch_value food_prod_value food_gift_value, by(hhid GRAPPE MENAGE EXTENSION region department commune fhh hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_day interview_month interview_year rural weight crop_category1)
 
 foreach v of varlist * {
 	label var `v' "`l`v''" 
@@ -1016,7 +1052,7 @@ lab var Instrument "Survey name"
 qui gen Year="2014"
 lab var Year "Survey year"
 
-keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
+keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_day interview_month interview_year fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
 
 *generate GID_1 code to match codes in the Benin shapefile
 gen GID_1=""

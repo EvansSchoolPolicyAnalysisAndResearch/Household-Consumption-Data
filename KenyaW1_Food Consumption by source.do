@@ -93,6 +93,9 @@ gen hh_members = 1
 keep if hh_members==1
 lab var hh_members "Number of household members"
 ren b05_yy age
+replace age=. if age==998 
+replace age=. if age==999 
+
 gen adulteq=.
 replace adulteq=0.4 if (age<3 & age>=0)				
 replace adulteq=0.48 if (age<5 & age>2)
@@ -111,14 +114,37 @@ replace adulteq=0.72 if (age>59 & age!=.) & gender==2
 replace adulteq=. if age==998
 replace adulteq=. if age==999
 lab var adulteq "Adult-Equivalent"
+
+gen age_hh= age if b03==1
+lab var age_hh "Age of household head"
+gen nadultworking=1 if age>=18 & age<65
+lab var nadultworking "Number of working age adults"
+gen nadultworking_female=1 if age>=18 & age<65 & gender==2 
+lab var nadultworking_female "Number of working age female adults"
+gen nadultworking_male=1 if age>=18 & age<65 & gender==1 
+lab var nadultworking_male "Number of working age male adults"
+gen nchildren=1 if age<=17
+lab var nchildren "Number of children"
+gen nelders=1 if age>=65
+lab var nelders "Number of elders"
+
 egen HHID=concat(clid hhid)
-collapse (max) fhh (sum) hh_members adulteq, by(clid hhid)
+collapse (max) fhh age_hh (sum) hh_members adulteq nadultworking nadultworking_female nadultworking_male nchildren nelders, by(clid hhid)
 
 merge 1:m clid hhid using "${Kenya_IHS_W1_raw_data}/HH_Information.dta", nogen keep (1 3)
 ren strat strata
 gen rural = (resid==1)
 lab var rural "1=Household lives in a rural area"
 gen HHID=string(clid)+"."+string(hhid)
+
+ren iday first_interview_date
+gen interview_year=year(first_interview_date)
+gen interview_month=month(first_interview_date)
+gen interview_day=day(first_interview_date)
+lab var interview_day "Survey interview day"
+lab var interview_month "Survey interview month"
+lab var interview_year "Survey interview year"
+
 
 *Generating the variable that indicate the level of representativness of the survey (to use for reporting summary stats)
 *Representative at the county level.
@@ -136,7 +162,7 @@ gen ccf_2ppp = (1 + $Kenya_IHS_W1_inflation)/ $Kenya_IHS_W1_gdp_ppp_dollar
 lab var ccf_2ppp "currency conversion factor - 2017 $GDP PPP"
 
 
-keep HHID county strata clid hhid rural weight fhh hh_members adulteq level_representativness
+keep HHID county strata clid hhid rural weight fhh hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_day interview_month interview_year level_representativness
 save "${Kenya_IHS_W1_created_data}/Kenya_IHS_W1_hhids.dta", replace
 
 
@@ -542,7 +568,7 @@ lab var Instrument "Survey name"
 qui gen Year="2015/16"
 lab var Year "Survey year"
 
-keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
+keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_day interview_month interview_year fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
 
 
 *generate GID_1 code to match codes in the Benin shapefile

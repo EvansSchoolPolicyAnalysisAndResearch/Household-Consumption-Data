@@ -112,11 +112,31 @@ replace adulteq=0.72 if (age>59 & age!=.) & gender==2
 replace adulteq=. if age==999
 lab var adulteq "Adult-Equivalent"
 ren hhweight weight
-collapse (max) fhh weight (sum) hh_members adulteq, by(a01)
+
+gen age_hh= age if b1_03==1
+lab var age_hh "Age of household head"
+gen nadultworking=1 if age>=18 & age<65
+lab var nadultworking "Number of working age adults"
+gen nadultworking_female=1 if age>=18 & age<65 & gender==2 
+lab var nadultworking_female "Number of working age female adults"
+gen nadultworking_male=1 if age>=18 & age<65 & gender==1 
+lab var nadultworking_male "Number of working age male adults"
+gen nchildren=1 if age<=17
+lab var nchildren "Number of children"
+gen nelders=1 if age>=65
+lab var nelders "Number of elders"
+
+collapse (max) fhh weight age_hh (sum) hh_members adulteq nadultworking nadultworking_female nadultworking_male nchildren nelders, by(a01)
 
 merge 1:m a01 using "${Bangladesh_IHS_W3_raw_data}/Female/092_bihs_r3_female_mod_a.dta", nogen keep (1 3)
 ren div_name division
 ren a01 hhid 
+ren a16_1_dd interview_day
+ren a16_1_mm interview_month
+ren a16_1_yy interview_year
+lab var interview_day "Survey interview day"
+lab var interview_month "Survey interview month"
+lab var interview_year "Survey interview year"
 
 *Generating the variable that indicate the level of representativness of the survey (to use for reporting summary stats)
 gen level_representativness=.
@@ -149,7 +169,7 @@ lab var ccf_loc "currency conversion factor - 2017 $TZS"
 gen ccf_2ppp = (1 + $Bangladesh_IHS_W3_inflation)/ $Bangladesh_IHS_W3_gdp_ppp_dollar
 lab var ccf_2ppp "currency conversion factor - 2017 $GDP PPP"
 
-keep hhid division district upazila union mouza village weight fhh hh_members adulteq
+keep hhid division district upazila union mouza village weight fhh hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_day interview_month interview_year
 
 save "${Bangladesh_IHS_W3_created_data}/Bangladesh_IHS_W3_hhids.dta", replace
 
@@ -662,7 +682,7 @@ lab var Instrument "Survey name"
 qui gen Year="2018/19"
 lab var Year "Survey year"
 
-keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
+keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_day interview_month interview_year fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
 
 gen GID_1=""
 replace GID_1="BGD.1_1"  if adm1=="Barisal"
@@ -736,6 +756,7 @@ foreach x of varlist food_consu_value food_purch_value food_prod_value food_gift
 ren hhid old_hhid
 gen hhid=string(old_hhid)
 drop old_hhid
+lab var hhid "Household ID"
 
 compress
 save "${final_data}/Bangladesh_IHS_W3_food_consumption_value_by_source.dta", replace

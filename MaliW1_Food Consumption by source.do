@@ -95,6 +95,8 @@ ren s01q01 gender
 gen fhh=(s01q02==1 & gender==2)  
 lab var fhh "1=Female-headed household"
 ren s01q04a  age
+replace age=. if age>=98
+
 gen hh_members = 1 
 keep if hh_members==1
 lab var hh_members "Number of household members"
@@ -115,10 +117,32 @@ replace adulteq=0.8 if (age>59 & age!=.) & gender==1
 replace adulteq=0.72 if (age>59 & age!=.) & gender==2
 replace adulteq=. if age==999
 lab var adulteq "Adult-Equivalent"
-collapse (max) fhh (sum) hh_members adulteq, by(grappe menage)
+
+gen age_hh= age if s01q02==1
+lab var age_hh "Age of household head"
+gen nadultworking=1 if age>=18 & age<65
+lab var nadultworking "Number of working age adults"
+gen nadultworking_female=1 if age>=18 & age<65 & gender==2 
+lab var nadultworking_female "Number of working age female adults"
+gen nadultworking_male=1 if age>=18 & age<65 & gender==1 
+lab var nadultworking_male "Number of working age male adults"
+gen nchildren=1 if age<=17
+lab var nchildren "Number of children"
+gen nelders=1 if age>=65
+lab var nelders "Number of elders"
+
+collapse (max) fhh age_hh (sum) hh_members adulteq nadultworking nadultworking_female nadultworking_male nchildren nelders, by(grappe menage)
 
 merge 1:1 grappe menage using "${Mali_EACI_W1_raw_data}\Household\EACICONTROLE_p1", nogen
 merge 1:1 grappe menage using "${Mali_EACI_W1_raw_data}\EACIPOIDS", nogen
+
+ren s00q22j interview_day
+ren s00q22m interview_month
+ren s00q22y interview_year
+lab var interview_day "Survey interview day"
+lab var interview_month "Survey interview month"
+lab var interview_year "Survey interview year"
+
 gen hhid=string(grappe)+"."+string(menage)
 order hhid, after(menage)
 lab var grappe "enumeration area (EA)"
@@ -179,7 +203,7 @@ lab var ccf_1ppp "currency conversion factor - 2017 $Private Consumption PPP"
 gen ccf_2ppp = (1 + $Mali_EACI_W1_inflation)/ $Mali_EACI_W1_gdp_ppp_dollar
 lab var ccf_2ppp "currency conversion factor - 2017 $GDP PPP"
  
-keep hhid grappe menage fhh hh_members adulteq region cercle arrondissement grappe menage rural weight
+keep hhid grappe menage fhh hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_day interview_month interview_year region cercle arrondissement grappe menage rural weight
 save "${Mali_EACI_W1_created_data}\Mali_EACI_W1_hhids.dta", replace
 
  
@@ -556,7 +580,7 @@ lab var Instrument "Survey name"
 qui gen Year="2014"
 lab var Year "Survey year"
 
-keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
+keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_day interview_month interview_year fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
 
 *generate GID_1 code to match codes in the Mali shapefile
 gen GID_1=""

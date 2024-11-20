@@ -113,6 +113,20 @@ lab var adulteq "Adult-Equivalent"
 gen rural = (region==2)
 lab var rural "1=Household lives in a rural area"
 
+gen age_hh= age if sbq03==1
+lab var age_hh "Age of household head"
+gen nadultworking=1 if age>=18 & age<65
+lab var nadultworking "Number of working age adults"
+gen nadultworking_female=1 if age>=18 & age<65 & gender==2 
+lab var nadultworking_female "Number of working age female adults"
+gen nadultworking_male=1 if age>=18 & age<65 & gender==1 
+lab var nadultworking_male "Number of working age male adults"
+gen nchildren=1 if age<=17
+lab var nchildren "Number of children"
+gen nelders=1 if age>=65
+lab var nelders "Number of elders"
+
+
 *Generating the variable that indicate the level of representativness of the survey (to use for reporting summary stats)
 *Representative at the county level.
 gen level_representativness=.
@@ -137,7 +151,101 @@ lab define lrep 11 "Punjab - Rural"  ///
 
 lab value level_representativness	lrep
 tab level_representativness
-collapse (max) fhh rural level_representativness province weight (sum) hh_members adulteq, by(psu hhcode)
+
+collapse (max) fhh rural age_hh level_representativness province weight (sum) hh_members adulteq nadultworking nadultworking_female nadultworking_male nchildren nelders, by(psu hhno hhcode)
+ren hhno hno 
+
+merge 1:1 psu hno using "${Pakistan_HIES_W1_raw_data}\sec_a.dta", nogen keepusing (a6_date1)
+
+ren a6_date1 first_interview_date
+replace first_interview_date= 050505 if first_interview_date== 505005
+replace first_interview_date= 090405 if first_interview_date==904051
+replace first_interview_date= 210405 if first_interview_date==214005
+replace first_interview_date= 100405 if first_interview_date==104005
+replace first_interview_date= 090505 if first_interview_date==91505
+replace first_interview_date= 010204 if first_interview_date==1204
+replace first_interview_date= 010204 if first_interview_date==10204
+replace first_interview_date= 180805 if first_interview_date==181805
+replace first_interview_date= 060505 if first_interview_date==605005
+replace first_interview_date= 060505 if first_interview_date==60505
+replace first_interview_date= 100305 if first_interview_date==103005
+replace first_interview_date= 100305 if first_interview_date==103005
+replace first_interview_date= 080204 if first_interview_date==381204
+
+replace first_interview_date= 280904 if first_interview_date==280901
+replace first_interview_date= 240904 if first_interview_date==240901
+
+replace first_interview_date= 170404 if first_interview_date==170402
+replace first_interview_date= 110104 if first_interview_date==110102
+replace first_interview_date= 271004 if first_interview_date==271002
+replace first_interview_date= 170404 if first_interview_date==170402
+replace first_interview_date= 161004 if first_interview_date==161002
+replace first_interview_date= 090504 if first_interview_date==90502
+replace first_interview_date= 280504 if first_interview_date==280502
+replace first_interview_date= 080204 if first_interview_date==80202
+
+replace first_interview_date= 281104 if first_interview_date==281103
+replace first_interview_date= 311004 if first_interview_date==311003
+replace first_interview_date= 230604 if first_interview_date==230603
+replace first_interview_date= 200904 if first_interview_date==200903
+replace first_interview_date= 200704 if first_interview_date==200703
+replace first_interview_date= 251004 if first_interview_date==251003
+replace first_interview_date= 050304 if first_interview_date==50303
+replace first_interview_date= 241004 if first_interview_date==241003
+replace first_interview_date= 131004 if first_interview_date==131003
+replace first_interview_date= 070504 if first_interview_date==70503
+replace first_interview_date= 250204 if first_interview_date==250203
+replace first_interview_date= 290904 if first_interview_date==290903
+replace first_interview_date= 091004 if first_interview_date==91003
+replace first_interview_date= 101004 if first_interview_date==101003
+replace first_interview_date= 250404 if first_interview_date==250403
+replace first_interview_date= 241104 if first_interview_date==241103
+replace first_interview_date= 111004 if first_interview_date==111003
+replace first_interview_date= 111004 if first_interview_date==111001
+replace first_interview_date= 121004 if first_interview_date==121003
+replace first_interview_date= 131104 if first_interview_date==131103
+replace first_interview_date= 051104 if first_interview_date==51103
+replace first_interview_date= 130404 if first_interview_date==130403
+replace first_interview_date= 130504 if first_interview_date==130503
+
+replace first_interview_date= 130605 if first_interview_date==130608
+replace first_interview_date= 120405 if first_interview_date==120406
+replace first_interview_date= 140405 if first_interview_date==140415
+replace first_interview_date= 241105 if first_interview_date==241109
+replace first_interview_date= 251005 if first_interview_date==251007
+replace first_interview_date= 090405 if first_interview_date==90405
+replace first_interview_date= 071005 if first_interview_date==71007
+replace first_interview_date= 140205 if first_interview_date==140206
+replace first_interview_date= 120505 if first_interview_date==120507
+replace first_interview_date= 161205 if first_interview_date==161206
+replace first_interview_date= 010204 if first_interview_date==10204
+replace first_interview_date= 100405 if first_interview_date==100406
+gen first_interview_date_str = string(first_interview_date, "%15.0f") 
+gen len=strlen(first_interview_date_str)
+
+
+gen interview_day1=substr(first_interview_date_str,1,2) if len==6
+gen interview_month1=substr(first_interview_date_str,3,2) if len==6
+gen interview_year1=substr(first_interview_date_str,5,2) if len==6
+
+gen interview_day2=substr(first_interview_date_str,1,1) if len==5
+gen interview_month2=substr(first_interview_date_str,2,2) if len==5
+gen interview_year2=substr(first_interview_date_str,4,2) if len==5
+
+gen interview_day=interview_day1+interview_day2
+gen interview_month=interview_month1+interview_month2
+gen interview_year=interview_year1+interview_year2
+
+destring interview_day interview_month interview_year, replace
+replace interview_year=2004 if interview_year==4
+replace interview_year=2005 if interview_year==5
+
+drop interview_day1 interview_day2 interview_month1 interview_month2 interview_year1 interview_year2
+
+lab var interview_day "Survey interview day"
+lab var interview_month "Survey interview month"
+lab var interview_year "Survey interview year"
+
 
 
 ****Currency Conversion Factors***
@@ -150,6 +258,7 @@ lab var ccf_loc "currency conversion factor - 2017 $PKR"
 gen ccf_2ppp = (1 + $Pakistan_HIES_W1_inflation)/ $Pakistan_HIES_W1_gdp_ppp_dollar
 lab var ccf_2ppp "currency conversion factor - 2017 $GDP PPP"
 
+ren hno hhno
 save "${Pakistan_HIES_W1_created_data}/Pakistan_HIES_W1_hhids.dta", replace
 
 
@@ -157,7 +266,7 @@ save "${Pakistan_HIES_W1_created_data}/Pakistan_HIES_W1_hhids.dta", replace
 *CONSUMPTION 
 ******************************************************************************** 
 use "${Pakistan_HIES_W1_raw_data}\secl1_3.dta", clear
-merge m:1 hhcode using "${Pakistan_HIES_W1_created_data}/Pakistan_HIES_W1_hhids.dta", nogen keep (1 3)
+merge m:1 hhcode hhno psu using "${Pakistan_HIES_W1_created_data}/Pakistan_HIES_W1_hhids.dta", nogen keep (1 3)
 
 label list itc
 
@@ -317,8 +426,8 @@ foreach v of varlist * {
 		local l`v': var label `v'
 }
 
-collapse (mean) food_consu_value food_purch_value food_prod_value food_gift_value  ,by(hhcode province psu fhh hh_members adulteq rural weight crop_category1)
-merge m:1 hhcode using "${Pakistan_HIES_W1_created_data}/Pakistan_HIES_W1_hhids.dta", nogen keep (1 3)
+collapse (mean) food_consu_value food_purch_value food_prod_value food_gift_value  ,by(hhcode hhno province psu fhh hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_day interview_month interview_year rural weight crop_category1)
+merge m:1 hhcode hhno psu using "${Pakistan_HIES_W1_created_data}/Pakistan_HIES_W1_hhids.dta", nogen keep (1 3)
 
 
 foreach v of varlist * {
@@ -349,7 +458,7 @@ lab var Instrument "Survey name"
 qui gen Year="2004/05"
 lab var Year "Survey year"
 
-keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
+keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_day interview_month interview_year fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
 
 *generate GID_1 code to match codes in the Pakistan shapefile
 gen GID_1=""

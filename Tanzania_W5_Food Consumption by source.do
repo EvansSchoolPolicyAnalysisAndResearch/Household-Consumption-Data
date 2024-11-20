@@ -108,7 +108,21 @@ replace adulteq=0.88 if (age<60 & age>18) & gender==2
 replace adulteq=0.8 if (age>59 & age!=.) & gender==1
 replace adulteq=0.72 if (age>59 & age!=.) & gender==2
 lab var adulteq "Adult-Equivalent"
-collapse (sum) hh_members adulteq (max) fhh, by (y5_hhid)
+
+gen age_hh= age if hh_b05==1
+lab var age_hh "Age of household head"
+gen nadultworking=1 if age>=18 & age<65
+lab var nadultworking "Number of working age adults"
+gen nadultworking_female=1 if age>=18 & age<65 & gender==2 
+lab var nadultworking_female "Number of working age female adults"
+gen nadultworking_male=1 if age>=18 & age<65 & gender==1 
+lab var nadultworking_male "Number of working age male adults"
+gen nchildren=1 if age<=17
+lab var nchildren "Number of children"
+gen nelders=1 if age>=65
+lab var nelders "Number of elders"
+
+collapse (max) fhh age_hh (sum) hh_members (sum) adulteq nadultworking nadultworking_female nadultworking_male nchildren nelders, by(y5_hhid)
 
 merge 1:1 y5_hhid using "${Tanzania_NPS_W5_raw_data}/HH_SEC_A.dta", nogen keep (1 3)
 ren hh_a01_1 region 
@@ -121,8 +135,17 @@ ren hh_a04_1 ea
 ren y5_crossweight weight //sdd = y5
 
 gen rural = (y5_rural==1) 
-keep y5_hhid region district ward village ward_name village_name ea rural weight strataid clusterid fhh hh_members adulteq
 lab var rural "1=Household lives in a rural area"
+
+ren int_month_code2 interview_month
+gen interview_year=2021
+replace interview_year=2020 if int_month_year==1
+replace interview_year=2022 if int_month_year==14
+
+lab var interview_month "Survey interview month"
+lab var interview_year "Survey interview year"
+
+keep y5_hhid region district ward village ward_name village_name ea rural weight strataid clusterid fhh hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_month interview_year
 
 *Generating the variable that indicate the level of representativness of the survey (to use for reporting summary stats)
 gen level_representativness=.
@@ -422,7 +445,7 @@ lab var Instrument "Survey name"
 qui gen Year="2019/20"
 lab var Year "Survey year"
 
-keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
+keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders interview_month interview_yearfhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
 
 *generate GID_1 code to match codes in the Benin shapefile
 gen GID_1=""

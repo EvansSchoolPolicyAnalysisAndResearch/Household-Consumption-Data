@@ -90,6 +90,8 @@ global wins_upper_thres 99							//  Threshold for winzorization at the top of t
 *HOUSEHOLD IDS 
 ************************
 use "${India_HCE_W1_raw_data}\Type 1\Demographic and other particulars of household members - Block 4  - Level 4 - 68.dta", clear
+merge m:1 HHID using "${India_HCE_W1_raw_data}/Type 1/Identification of Sample Household - Block 1 and 2 - Level 1 -  68.dta", nogen keep (1 3)
+
 ren Sex gender
 gen fhh = (gender=="2"  & Relation=="1")
 lab var fhh "1= Female-headed Household"
@@ -110,10 +112,20 @@ replace adulteq=0.88 if (age<60 & age>18) & gender=="2"
 replace adulteq=0.8 if (age>59 & age!=.) & gender=="1"
 replace adulteq=0.72 if (age>59 & age!=.) & gender=="2"
 replace adulteq=. if age==999
-lab var adulteq "Adult-Equivalent"
 gen hh_members=1
-collapse (max) fhh (sum) hh_members adulteq, by(HHID)
-merge 1:m HHID using "${India_HCE_W1_raw_data}/Type 1/Identification of Sample Household - Block 1 and 2 - Level 1 -  68.dta", nogen keep (1 3)
+
+gen age_hh= age if Relation=="1"
+lab var age_hh "Age of household head"
+gen nadultworking=1 if age>=18 & age<65
+lab var nadultworking "Number of working age adults"
+gen nadultworking_female=1 if age>=18 & age<65 & gender=="2" 
+lab var nadultworking_female "Number of working age female adults"
+gen nadultworking_male=1 if age>=18 & age<65 & gender=="1" 
+lab var nadultworking_male "Number of working age male adults"
+gen nchildren=1 if age<=17
+lab var nchildren "Number of children"
+gen nelders=1 if age>=65
+lab var nelders "Number of elders"
 
 ****Currency Conversion Factors***
 gen ccf_loc = (1 + $India_HCE_W1_inflation) 
@@ -131,8 +143,10 @@ ren Stratum stratum
 ren State_region state
 gen rural = (Sector=="1") 
 lab var rural "1=Household lives in a rural area"
+collapse (max) fhh age_hh weight (sum) hh_members adulteq nadultworking nadultworking_female nadultworking_male nchildren nelders, by(HHID district stratum state rural )
+
 ren HHID hhid
-keep hhid state district stratum rural weight fhh hh_members adulteq State_code
+keep hhid state district stratum rural weight fhh hh_members adulteq nadultworking nadultworking_female nadultworking_male nchildren nelders 
 
 save "${created_data}/India_HCE_W1_hhids.dta", replace
 
@@ -798,7 +812,7 @@ foreach v of varlist * {
 		local l`v': var label `v'
 }
 
-collapse (mean) food_consu_value food_purch_value food_prod_value food_gift_value  ,by(hhid state district stratum fhh hh_members adulteq rural weight crop_category1)
+collapse (mean) food_consu_value food_purch_value food_prod_value food_gift_value  ,by(hhid state district stratum fhh hh_members adulteq nadultworking rural weight crop_category1)
 
 foreach v of varlist * {
 	label var `v' "`l`v''" 
@@ -834,7 +848,7 @@ lab var Instrument "Survey name"
 qui gen Year="2012"
 lab var Year "Survey year"
 
-keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
+keep hhid crop_category1 food_consu_value food_purch_value food_prod_value food_gift_value hh_members adulteq age_hh nadultworking nadultworking_female nadultworking_male nchildren nelders fhh adm1 adm2 adm3 weight rural w_food_consu_value w_food_purch_value w_food_prod_value w_food_gift_value Country Instrument Year
 
 *Additional aggregation of commodities
 gen  crop_category2=""		
