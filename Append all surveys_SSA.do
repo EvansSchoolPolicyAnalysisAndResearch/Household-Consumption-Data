@@ -1,3 +1,16 @@
+ /*-------------------------------------------------------------------------------------------------------------------------
+*Title/Purpose 	: This do.file was developed by the Evans School Policy Analysis & Research Group (EPAR) 
+				 for the construction of a set of household food consumption by food categories and source
+				 (purchased, own production, and gifts) indicators
+				 
+*Author(s)		: Amaka Nnaji, Didier Alia & C. Leigh Anderson
+
+*Acknowledgments: We acknowledge the helpful contributions of EPAR Research Assistants, Post-docs, and Research Scientists who provided helpful comments during the process of developing these codes. We are also grateful to the World Bank's LSMS-ISA team, IFPRI, and National Bureaus of Statistics in the countries included in the analysis for collecting the raw data and making them publicly available. Finally, we acknowledge the support of the Bill & Melinda Gates Foundation Agricultural Development Division. 
+				  All coding errors remain ours alone.
+				  
+*Date			: August 2024
+-------------------------------------------------------------------------------------------------------------------------*/
+
 
 clear
 clear matrix
