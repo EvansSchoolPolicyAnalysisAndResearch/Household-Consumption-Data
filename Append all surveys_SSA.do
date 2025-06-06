@@ -30,5 +30,8 @@ count
 codebook, c
 tab Instrument
 
+drop if crop_category1==""
+drop adm1x 
+
 save "${final_data}/ALL_SURVEYS_food_consumption_value_by_source.dta", replace
 
